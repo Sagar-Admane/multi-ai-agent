@@ -1,0 +1,29 @@
+{
+  "name": "mcp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "server:build": "tsc",
+    "server:build:watch": "tsc --watch",
+    "server:dev": "tsx src/server.ts",
+    "server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector@0.15.0 npm run server:dev",
+    "server:test": "tsx ./src/github.ts",
+    "client:mcp": "cd build && node client.js",
+    "client:dev": "tsx src/client.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ai-sdk/google": "^2.0.43",
+    "@google/genai": "^1.30.0",
+    "@modelcontextprotocol/sdk": "^1.23.0",
+    "@types/node": "^24.10.1",
+    "ai": "^5.0.102",
+    "dotenv": "^17.2.3",
+    "tsx": "^4.20.6",
+    "zod": "^4.1.13"
+  }
+}
