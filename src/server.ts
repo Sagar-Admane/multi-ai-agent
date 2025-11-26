@@ -3,6 +3,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import {z} from "zod";
 import env from "dotenv"
 import {generateTasks} from "../src/utils/gemini-tasks.js"
+import { connectDB } from "./utils/db.js";
 
 env.config();
 
@@ -33,6 +34,7 @@ server.registerTool(
 
 async function main(){
     const transport = new StdioServerTransport();
+    await connectDB();
     await server.connect(transport);
 }
 
