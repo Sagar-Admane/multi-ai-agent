@@ -2,8 +2,9 @@ import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import {generateTasks} from "../src/utils/gemini-tasks.js"
+import {generateEmbeddings, generateTasks} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
+import Memory from "../src/models/memory.js";
 
 console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
 
@@ -22,16 +23,29 @@ server.registerTool(
         }
     },
     async ({text}) => {
+        try {
+            const embedding = await generateEmbeddings(text);
+            const tags = await generateTasks(text);
+            const memory = new Memory({
+                text : text,
+                embeddings : embedding,
+                tags : tags
+            })
+            await memory.save();
 
-        const tasks = await generateTasks(text);
-        console.log("Generated tasks:", tasks);
-        const output = `Memory Agent received the following text: ${tasks}`;
-        return {
-            content : [{type : "text", text : output}]
+
+
+            return{
+                content : [{type : "text", text : `Memory data with embeddings saved in database ${embedding} `}]
+            }
+
+        } catch (error) {
+            return{
+                content : [{type:"text", text : "Error while saving the memory"}]
+            }
         }
     }
 )
-
 async function main(){
     const transport = new StdioServerTransport();
     await connectDB();
