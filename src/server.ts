@@ -1,11 +1,11 @@
+import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import env from "dotenv"
 import {generateTasks} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
 
-env.config();
+console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
 
 const server = new McpServer({
     name : "MCP_MULTI_AGENT_SERVER",
@@ -13,7 +13,7 @@ const server = new McpServer({
 })
 
 server.registerTool(
-    "memory-agent",
+    "save-memory",
     {
         title : "Memory Agent",
         description : "An agent that manages and retrieves information from memory storage.",
@@ -24,7 +24,7 @@ server.registerTool(
     async ({text}) => {
 
         const tasks = await generateTasks(text);
-
+        console.log("Generated tasks:", tasks);
         const output = `Memory Agent received the following text: ${tasks}`;
         return {
             content : [{type : "text", text : output}]
