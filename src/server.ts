@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import {generateAIRespone, generateEmbeddings, generateTasks} from "../src/utils/gemini-tasks.js"
+import {generateAIRespone, generateEmbeddings, generateImportanceScore, generateTasks} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
 import Memory from "../src/models/memory.js";
 import { cosineSimilarity } from 'ai';
@@ -45,21 +45,26 @@ server.registerTool(
 
             const threshold = 0.85;
 
+            let importanceScore = await generateImportanceScore(text);
             if(bestScore > threshold){
                 bestMatch.embeddings = embedding;
                 bestMatch.text = text;
                 const finalTags = new Set([...(bestMatch.tags || []), ...tags]);
                 bestMatch.tags = [...finalTags];
                 bestMatch.category = category;
-                await bestMatch.save();
+                if(importanceScore > 1){
+                    await bestMatch.save();
+                }
             } else {
-                const memory = new Memory({
-                text : text,
-                embeddings : embedding,
-                category : category,
-                tags : tags
-            })
-            await memory.save();
+                if(importanceScore > 1){
+                    const memory = new Memory({
+                    text : text,
+                    embeddings : embedding,
+                    category : category,
+                    tags : tags
+                })
+                await memory.save();
+                }
             }
             const ai_response = await generateAIRespone(text)
 

@@ -53,3 +53,24 @@ export async function generateAIRespone(text: string){
         return error;
     }
 }
+
+export async function generateImportanceScore(text : string) : Promise<number> {
+    try {
+        const response = await generateText({
+            model : google("gemini-2.0-flash"),
+            prompt : `
+                Rate the importance of this memory on a scale of 1-5:
+                1 = unimportant
+                5 = critical / permanent
+
+                Memory: "${text}"
+
+                Remember to return only the number (1-5).`
+        })
+
+        return parseInt(response.text);
+
+    } catch (error) {
+        return 0;
+    }
+}

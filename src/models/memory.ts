@@ -20,6 +20,10 @@ const memorySchema = new mongoose.Schema({
     category : {
         type : String,
     },
+    importance : {
+        type : Number,
+        required : true
+    },
     tags : {
         type : [String],
         default : []
