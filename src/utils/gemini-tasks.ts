@@ -11,7 +11,17 @@ export async function generateTasks(text : string){
         prompt : `Extract 3-5 concise keywords from this text, as an array of strings : ${text} `
     })
 
-    return response.text;
+    const response1 = await generateText({
+        model : google("gemini-2.0-flash"),
+        prompt : `Claasify the following text based on the categories I am providing. If none of them matched give me the category. Do remeber to provide the response in single word : 
+        text : ${text},
+        categories : profile, preference, goal, habit, task, knowledge, health, finance, schedule, episodic, relationship, other`
+    })
+
+    return {
+        tags : response.text,
+        category : response1.text
+    };
 }
 
 export async function generateEmbeddings(text: string) : Promise<number[]>{

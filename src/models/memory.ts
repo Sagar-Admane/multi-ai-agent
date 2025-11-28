@@ -17,6 +17,9 @@ const memorySchema = new mongoose.Schema({
         type : [Number],
         required : true,
     },
+    category : {
+        type : String,
+    },
     tags : {
         type : [String],
         default : []

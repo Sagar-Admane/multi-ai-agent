@@ -26,7 +26,7 @@ server.registerTool(
     async ({text}) => {
         try {
             const embedding : number[] = await generateEmbeddings(text);
-            const tags = await generateTasks(text);
+            const {tags, category} = await generateTasks(text);
 
             let bestMatch : any = null;
             let bestScore = 0;
@@ -50,11 +50,13 @@ server.registerTool(
                 bestMatch.text = text;
                 const finalTags = new Set([...(bestMatch.tags || []), ...tags]);
                 bestMatch.tags = [...finalTags];
+                bestMatch.category = category;
                 await bestMatch.save();
             } else {
                 const memory = new Memory({
                 text : text,
                 embeddings : embedding,
+                category : category,
                 tags : tags
             })
             await memory.save();
