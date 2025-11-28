@@ -46,6 +46,24 @@ server.registerTool(
         }
     }
 )
+
+server.registerTool(
+    "query-memory",
+    {
+        title : "Query Memory Tool",
+        description : "This tool helps to query from all the memory tool",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        return{
+            content : [{type : "text", text : "Hello this is basic"}]
+        }
+    }
+)
+
+
 async function main(){
     const transport = new StdioServerTransport();
     await connectDB();
