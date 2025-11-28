@@ -104,6 +104,43 @@ server.registerTool(
     }
 )
 
+server.registerTool(
+    "delete-memory",
+    {
+        title : "Deletes a memory from database",
+        description : "This tool helps to delete a memory from the database",
+        inputSchema :{
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        try {
+            const embedding = await generateEmbeddings(text)
+            const memories = await Memory.find();
+
+            const scored = memories.map((m) => ({
+                memory : m,
+                score : cosineSimilarity(embedding, m.embeddings)
+            }))
+
+            scored.sort((a,b) => b.score - a.score)
+            const matches = scored.slice(0, 3);
+
+            const toDelete = matches.filter(m => m.score >= 0.7);
+
+            const best = toDelete[0].memory;
+            await Memory.findByIdAndDelete(best._id);
+
+            return{
+                content : [{type : "text", text : "The memory is deleted"}]
+            }
+        } catch (error) {
+            return {
+                content : [{type : "text", text : "Error while deleting from memory"}]
+            }
+        }
+    }
+)
 
 async function main(){
     const transport = new StdioServerTransport();
