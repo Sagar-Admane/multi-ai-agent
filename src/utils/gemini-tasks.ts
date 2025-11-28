@@ -14,7 +14,7 @@ export async function generateTasks(text : string){
     return response.text;
 }
 
-export async function generateEmbeddings(text: string){
+export async function generateEmbeddings(text: string) : Promise<number[]>{
     try {
 
         const {embedding} = await embed({
@@ -25,6 +25,21 @@ export async function generateEmbeddings(text: string){
         return embedding;
 
     } catch (error) {
-        console.log("Error while generating the embedding")
+        console.log("Error while generating the embedding");
+        return [];
+    }
+}
+
+
+export async function generateAIRespone(text: string){
+    try {
+        const response = await generateText({
+            model: google("gemini-2.0-flash"),
+            prompt : `Give me a simple no further moving conversational response for the following text : ${text}`
+        })
+
+        return response.text;
+    } catch (error) {
+        return error;
     }
 }

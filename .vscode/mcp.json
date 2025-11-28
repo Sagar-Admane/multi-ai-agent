@@ -1,4 +1,13 @@
 {
-	"inputs": [],
-	"servers": {}
+	"servers": {
+		"my-mcp-server-8f046549": {
+			"type": "stdio",
+			"command": "npm",
+			"args": [
+				"run",
+				"server:dev"
+			]
+		}
+	},
+	"inputs": []
 }
