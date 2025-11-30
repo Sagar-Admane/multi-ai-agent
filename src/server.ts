@@ -183,6 +183,40 @@ server.registerTool(
 )
 
 
+server.registerTool(
+    "query-episodic",
+    {
+        title : "This is querying the episodic memory",
+        description : "This is querying the episodic memory",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        try {
+            const embedding : number[]= await generateEmbeddings(text);
+
+            const memories = await EpisodicMemory.find();
+
+            const scored = memories.map((m) => ({
+                memory : m,
+                score : cosineSimilarity(embedding, m.embedding)
+            }))
+
+            scored.sort((a,b) =>  b.score - a.score);
+
+            return{
+                content : [{type : "text", text :  `${scored.slice(0,3)}`}]
+            }
+
+
+        } catch (error) {
+            return{
+                content : [{type : "text", text : "Error in querying in episodic"}]
+            }
+        }
+    }
+)
 
 async function main(){
     const transport = new StdioServerTransport();
