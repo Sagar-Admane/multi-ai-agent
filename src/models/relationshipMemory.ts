@@ -25,5 +25,5 @@ const relationshipSchema = new mongoose.Schema({
     }
 })
 
-const relationshipModel = new mongoose.Model("relationshiipModel", relationshipSchema);
-export default relationshipModel;
+const model = mongoose.model("relationshipModel", relationshipSchema);
+export default model;

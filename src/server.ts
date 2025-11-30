@@ -2,10 +2,11 @@ import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import {generateAIRespone, generateEmbeddings, generateImportanceScore, generateTasks} from "../src/utils/gemini-tasks.js"
+import {generateAIRespone, generateEmbeddings, generateImportanceScore, generateTasks, genereateRelationship} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
 import EpisodicMemory from "../src/models/episodicMemory.js";
 import Memory from "../src/models/memory.js";
+import Relationship from "../src/models/relationshipMemory.js";
 import { cosineSimilarity } from 'ai';
 
 console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
@@ -167,7 +168,7 @@ server.registerTool(
                 content : text,
                 embedding : embedding
             })
-            epi_mem.save();
+            await epi_mem.save();
 
             const ai_response = await generateAIRespone(text);
 
@@ -218,6 +219,48 @@ server.registerTool(
     }
 )
 
+server.registerTool(
+    "save-relationship",
+    {
+        title : "Save relationship",
+        description : "This tool saves relationships",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        try {
+            const {personId, name} = await genereateRelationship(text);
+            const embedding = await generateEmbeddings(text);
+
+            let record = await Relationship.findOne({personId});
+
+            if(!record){
+                record = new Relationship({personId : personId, name : name}) 
+            }
+
+            record.facts.push({
+                content : text,
+                embedding : embedding
+            })
+
+            record.lastInteraction = text
+            if(name) record.name = name
+
+            await record.save();
+
+            return{
+                content : [{type : "text", text : `Relation saved in memory`}]
+            }
+
+
+        } catch (error) {
+            return{
+                content : [{type : "text", text : "Error saving relationship"}]
+            }
+        }
+    }
+)
 
 async function main(){
     const transport = new StdioServerTransport();
