@@ -74,3 +74,8 @@ export async function generateImportanceScore(text : string) : Promise<number> {
         return 0;
     }
 }
+
+
+export async function genereateRelationship(text){
+    
+}
