@@ -4,6 +4,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import {z} from "zod";
 import {generateAIRespone, generateEmbeddings, generateImportanceScore, generateTasks} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
+import EpisodicMemory from "../src/models/episodicMemory.js";
 import Memory from "../src/models/memory.js";
 import { cosineSimilarity } from 'ai';
 
@@ -148,6 +149,40 @@ server.registerTool(
         }
     }
 )
+
+
+server.registerTool(
+    "episodic-memory",
+    {
+        title : "Episodic memory",
+        description : "This tool helps to store the episodic memory",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async ({text}) => {
+        try {
+            const embedding : number[] = await generateEmbeddings(text);
+            const epi_mem = new EpisodicMemory({
+                content : text,
+                embedding : embedding
+            })
+            epi_mem.save();
+
+            const ai_response = await generateAIRespone(text);
+
+            return{
+                content : [{type : "text", text : `${ai_response}`}]
+            }
+        } catch (error) {
+            return {
+                content : [{type : "text", text : "Error storing the episodic memory"}]
+            }
+        }
+    }
+)
+
+
 
 async function main(){
     const transport = new StdioServerTransport();
