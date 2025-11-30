@@ -262,6 +262,49 @@ server.registerTool(
     }
 )
 
+server.registerTool(
+    "relationship-query",
+    {
+        title : "Relationship query",
+        description : "Queying the relationship",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async ({text}) => {
+        try {
+            const {personId} = await genereateRelationship(text);
+
+            const embedding = await generateEmbeddings(text);
+
+            const record = await Relationship.findOne({personId});
+
+            let scored : any[];
+
+            if(record){
+                scored = record.facts.map(f => ({
+                    ...f,
+                    score: cosineSimilarity(embedding, f.embedding)
+                }));
+                
+                scored.sort((a, b) => b.score - a.score);
+            } else {
+                scored = [];
+            }
+
+            return {
+                content : [{type : "text", text : `${scored.slice(0, 3)}`}]
+            }
+
+
+        } catch (error) {
+            return{
+                content : [{type : "text", text : `Error while querying in relationship`}]
+            }
+        }
+    }
+)
+
 async function main(){
     const transport = new StdioServerTransport();
     await connectDB();
