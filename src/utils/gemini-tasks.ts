@@ -80,7 +80,7 @@ export async function genereateRelationship(text : string){
         const personId = await generateText({
             model : google("gemini-2.0-flash"),
             prompt : `Determine the relationship of the main subject in the text with the user (Sagar).
-                    If the main subject refers to ‘I’, ‘me’, or ‘Sagar’, return user.
+                    If the main subject refers to ‘I’, ‘me’, or ‘Sagar’, or 'my' return user.
                     Otherwise, return friend.
                     Output only one word: user or friend.
                     Text: ${text}`
@@ -89,7 +89,9 @@ export async function genereateRelationship(text : string){
 
         const name = await generateText({
             model : google("gemini-2.0-flash"),
-            prompt : `Based on the following text, if mention in the text return me the name of the main Subject user, if not mention return me with the empty string : ${text}. Return response in one word`
+            prompt : `Based on the following text, if mention in the text return me the name of the main Subject user, if not mention return me with the empty string :
+                    Now but when the name is I or me or user or my return as "Sagar"
+                    ${text}. Return response in one word`
         })
 
         return {
