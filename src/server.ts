@@ -306,10 +306,88 @@ server.registerTool(
     }
 )
 
+server.registerTool(
+    "save-goalorhabbit",
+    {
+        title : "Save goal or habbit tool",
+        description : "This tool helps to save goal or habbit",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        try {
+            const embedding : number[] = await generateEmbeddings(text);
+            let {tags, category} = await generateTasks(text);
+            const threshold = 0.85;
+            const {bestMatch,  bestScore} = await checkIfTextExist(text, embedding);
+
+            const isHabbitOrGoal : string = await detectHabitOrGoal(text);
+
+            var goalDeadline : Date = await extractGoalDeadline(text);;
+            if(bestScore > threshold){
+                bestMatch.text = text;
+                bestMatch.embeddings = embedding;
+                if(isHabbitOrGoal == "goal"){
+                    bestMatch.isGoal = true;
+                    bestMatch.goalProgess = bestMatch.goalProgess || 0;
+                    bestMatch.goalDeadline =  goalDeadline;
+                }
+                bestMatch.tags = Array.from(new Set([...(bestMatch.tags||[]), ...tags]));
+                bestMatch.category = category;
+
+                await bestMatch.save();
+            } else {
+                const isGoal = isHabbitOrGoal==="goal";
+                const isHabbit = isHabbitOrGoal=="habbit";
+                const memory = new Memory({
+                    text : text,
+                    embeddings : embedding,
+                    category : category,
+                    isGoal : isGoal,
+                    goalDeadline : goalDeadline,
+                    tags : tags
+                })
+                
+                await memory.save()
+            }
+
+            return({
+                content : [{type : "text", text : `${isHabbitOrGoal}`}]
+            })
+        } catch (error) {
+            return({
+                content : [{type : "text", text : "Error while saving habbit or goal"}]
+            })
+        }
+    }
+)
+
 async function main(){
     const transport = new StdioServerTransport();
     await connectDB();
     await server.connect(transport);
+}
+
+async function checkIfTextExist(text : string, embeddings : number[]){
+    const memories = await Memory.find();
+    var bestScore = 0;
+    var bestMatch : any = null;
+    if(memories){
+        for(const m of memories){
+            const score = cosineSimilarity(embeddings, m.embeddings);
+            if(score > bestScore){
+                bestScore = score;
+                bestMatch = m;
+            }
+        }
+    }
+
+    return {
+        bestScore : bestScore,
+        bestMatch : bestMatch
+    }
+
 }
 
 main()
