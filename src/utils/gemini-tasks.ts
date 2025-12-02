@@ -5,11 +5,13 @@ const google = createGoogleGenerativeAI({
     apiKey : process.env.GEMINI_API_KEY 
 })
 
-export async function generateTasks(text : string){
+export async function generateTasks(text : string) {
     const response = await generateText({
         model : google("gemini-2.0-flash"),
         prompt : `Extract 3-5 concise keywords from this text, as an array of strings : ${text} `
     })
+
+    var tags : [string] = JSON.parse(response.text.replace(/```/g, "").trim().replace("json",``).trim())
 
     const response1 = await generateText({
         model : google("gemini-2.0-flash"),
@@ -19,7 +21,7 @@ export async function generateTasks(text : string){
     })
 
     return {
-        tags : response.text,
+        tags : tags,
         category : response1.text
     };
 }
@@ -109,14 +111,13 @@ export async function detectHabitOrGoal(text : String){
             prompt : `You are a classifier. Decide whether the following user statement is:
                     - a GOAL (long-term objective, multi-step, months/weeks),
                     - a HABIT (recurring action or routine, daily/weekly),
-                    - or NONE.
 
                     Return exactly one word: goal, habit, or none.
 
                     Statement: ${text}`
         })
 
-        return response.text;
+        return response.text.trim();
     } catch (error) {
         return "Error while detecting habit or Goal"
     }
@@ -141,7 +142,7 @@ export async function extractHabitFrequency(text : String){
 
 export async function extractGoalDeadline(text : string){
     try {
-
+        const date = new Date().toISOString().split("T")[0];
         const response = await generateText({
             model : google("gemini-2.0-flash"),
             prompt :   `Extract the goal deadline from the following text.
@@ -149,13 +150,16 @@ export async function extractGoalDeadline(text : string){
                     If the text mentions words like “today”, “tomorrow”, or “next week”, convert them to an actual date in YYYY-MM-DD format based on the current date.
                     If no deadline is mentioned, return "none".
                     Output must contain only the date (one token, no explanation, no punctuation).
-
+                    If the days is in like 30 days or in 20 days convert it into into YYYY-MM-DD format with the help of current date.
+                    Current date : ${date}
                     Text: ${text}`
                 })
-            return response.text;
+            const returedDate = new Date(response.text)
+            return returedDate;
 
     } catch (error) {
-        return "Cannot extract goal deadline"
+        const date = new Date().toISOString().split("T")[0];
+        return new Date(date);
     }
 }
 
