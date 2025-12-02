@@ -19,10 +19,50 @@ const memorySchema = new mongoose.Schema({
     },
     category : {
         type : String,
+        enum : [
+                  "profile","preference","goal","habit","task","knowledge","health","finance",
+      "schedule","episodic","relationship","other"
+        ],
+        default : "other",
     },
+
+    isGoal : {
+        type : Boolean,
+        default : false,
+    },
+    goalProgress : {
+        type : Number,
+        default : 0
+    },
+    goalDeadline : {
+        type : Date,
+        default : null
+    },
+
+
+    isHabbit : {
+        type : Boolean,
+        default : false,
+    },
+    habbitFrequency : {
+        type : String,
+        enum : [
+            "daily", "weekly", "monthly", "custome", "none"
+        ],
+        default : "none"
+    },
+    habbitStreak : {
+        type : Number,
+        default : 0,
+    },
+
+    linkedGoalId: { type: mongoose.Schema.Types.ObjectId, ref: 'Memory', default: null },
+
     importance : {
         type : Number,
-        required : true
+        enum : [1,2,3,4,5],
+        required : true,
+        default : 3
     },
     tags : {
         type : [String],

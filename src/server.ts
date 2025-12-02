@@ -2,12 +2,13 @@ import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import {generateAIRespone, generateEmbeddings, generateImportanceScore, generateTasks, genereateRelationship} from "../src/utils/gemini-tasks.js"
+import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateImportanceScore, generateTasks, genereateRelationship} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
 import EpisodicMemory from "../src/models/episodicMemory.js";
 import Memory from "../src/models/memory.js";
 import Relationship from "../src/models/relationshipMemory.js";
 import { cosineSimilarity } from 'ai';
+import { tryLinkHabitToGoal } from './utils/helperFunction.js';
 
 console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
 
