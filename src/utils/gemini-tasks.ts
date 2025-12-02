@@ -100,3 +100,63 @@ export async function genereateRelationship(text : string){
         }
     
 }
+
+
+export async function detectHabitOrGoal(text : String){
+    try {
+        const response = await generateText({
+            model : google("gemini-2.0-flash"),
+            prompt : `You are a classifier. Decide whether the following user statement is:
+                    - a GOAL (long-term objective, multi-step, months/weeks),
+                    - a HABIT (recurring action or routine, daily/weekly),
+                    - or NONE.
+
+                    Return exactly one word: goal, habit, or none.
+
+                    Statement: ${text}`
+        })
+
+        return response.text;
+    } catch (error) {
+        return "Error while detecting habit or Goal"
+    }
+}
+
+
+export async function extractHabitFrequency(text : String){
+    try {
+        const response = await generateText({
+            model : google("gemini-2.0-flash"),
+            prompt : `Extract the repetition frequency conveyed by this statement. Return one word:
+                    "daily, weekly, monthly, custom, none"
+
+                    Statement: ${text} `
+            });
+
+            return response.text
+    } catch (error) {
+        return "Error while extracting habitFrequency"
+    }
+}
+
+export async function extractGoalDeadline(text : string){
+    try {
+
+        const response = await generateText({
+            model : google("gemini-2.0-flash"),
+            prompt :   `Extract the goal deadline from the following text.
+                    Return the deadline as a date in YYYY-MM-DD format.
+                    If the text mentions words like “today”, “tomorrow”, or “next week”, convert them to an actual date in YYYY-MM-DD format based on the current date.
+                    If no deadline is mentioned, return "none".
+                    Output must contain only the date (one token, no explanation, no punctuation).
+
+                    Text: ${text}`
+                })
+            return response.text;
+
+    } catch (error) {
+        return "Cannot extract goal deadline"
+    }
+}
+
+
