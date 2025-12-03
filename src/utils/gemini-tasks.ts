@@ -50,7 +50,7 @@ export async function generateAIRespone(text: string){
             prompt : `Give me a simple no further moving conversational response for the following text : ${text}`
         })
 
-        return response.text;
+        return response.text.trim();
     } catch (error) {
         return error;
     }
@@ -70,7 +70,7 @@ export async function generateImportanceScore(text : string) : Promise<number> {
                 Remember to return only the number (1-5).`
         })
 
-        return parseInt(response.text);
+        return parseInt(response.text.trim());
 
     } catch (error) {
         return 0;
@@ -134,7 +134,7 @@ export async function extractHabitFrequency(text : String){
                     Statement: ${text} `
             });
 
-            return response.text
+            return response.text.trim()
     } catch (error) {
         return "Error while extracting habitFrequency"
     }
