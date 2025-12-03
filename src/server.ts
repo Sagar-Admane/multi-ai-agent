@@ -415,6 +415,47 @@ server.registerTool(
     }
 )
 
+server.registerTool(
+    "habit-checkin",
+    {
+        title : "Habit checkin to maintain streak",
+        description : "Tool helps to update the habit streak",
+        inputSchema  :{
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        try {
+            const embedding = await generateEmbeddings(text);
+            const {bestScore, bestMatch} = await checkIfTextExist(text, embedding);
+            const threshold = 0.70;
+            if(bestScore < threshold){
+                return {
+                    content : [{type : "text", text : `Cannot find such habit`}]
+                }
+            } else {
+                const lastUpdated = new Date(bestMatch.timestamp).toISOString();
+                const todaysDate = new Date(Date.now() - 86400000).toISOString();
+
+                if(lastUpdated === todaysDate){
+                    bestMatch.habbitStreak += 1;
+                } else {
+                    bestMatch.habbitStreak = 1;
+                }
+                await bestMatch.save();
+
+            }
+            return({
+                content : [{type : "text", text : "Habit streak updated successfully"}]
+            })
+        } catch (error) {
+            return {
+                content : [{type : "text", text : "Error in habit checking"}]
+            }
+        }
+    }
+)
+
 async function main(){
     const transport = new StdioServerTransport();
     await connectDB();
