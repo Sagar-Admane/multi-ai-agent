@@ -323,15 +323,20 @@ server.registerTool(
             const {bestMatch,  bestScore} = await checkIfTextExist(text, embedding);
 
             const isHabbitOrGoal : string = await detectHabitOrGoal(text);
-
+            var habbitFrequency = await extractHabitFrequency(text);
             var goalDeadline : Date = await extractGoalDeadline(text);;
             if(bestScore > threshold){
                 bestMatch.text = text;
                 bestMatch.embeddings = embedding;
-                if(isHabbitOrGoal == "goal"){
+                if(isHabbitOrGoal === "goal"){
                     bestMatch.isGoal = true;
                     bestMatch.goalProgess = bestMatch.goalProgess || 0;
                     bestMatch.goalDeadline =  goalDeadline;
+                }
+                if(isHabbitOrGoal==="habit"){
+                    bestMatch.isHabbit = false;
+                    bestMatch.habbitFrequency = habbitFrequency;
+                    bestMatch.habbitStreak = bestMatch.habbitStreak+1;
                 }
                 bestMatch.tags = Array.from(new Set([...(bestMatch.tags||[]), ...tags]));
                 bestMatch.category = category;
@@ -339,16 +344,23 @@ server.registerTool(
                 await bestMatch.save();
             } else {
                 const isGoal = isHabbitOrGoal==="goal";
-                const isHabbit = isHabbitOrGoal=="habbit";
+                const isHabbit = isHabbitOrGoal=="habit";
                 const memory = new Memory({
                     text : text,
                     embeddings : embedding,
                     category : category,
-                    isGoal : isGoal,
-                    goalDeadline : goalDeadline,
                     tags : tags
                 })
                 
+                if(isGoal){
+                    memory.isGoal = isGoal;
+                    memory.goalDeadline = goalDeadline;
+                }
+
+                if(isHabbit){
+                    memory.isHabbit = isHabbit;
+                    memory.habbitFrequency = habbitFrequency
+                }
                 await memory.save()
             }
 
