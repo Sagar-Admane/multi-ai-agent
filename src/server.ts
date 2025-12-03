@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateImportanceScore, generateTasks, genereateRelationship} from "../src/utils/gemini-tasks.js"
+import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateGoalProgress, generateImportanceScore, generateTasks, genereateRelationship} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
 import EpisodicMemory from "../src/models/episodicMemory.js";
 import Memory from "../src/models/memory.js";
@@ -374,6 +374,42 @@ server.registerTool(
         } catch (error) {
             return({
                 content : [{type : "text", text : "Error while saving habbit or goal"}]
+            })
+        }
+    }
+)
+
+server.registerTool(
+    "update-goalProgress",
+    {
+        title : "Update the Goal Progess",
+        description : "This tool helps to update the goal progress",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        try {
+            const embeddings = await generateEmbeddings(text);
+            const {bestScore, bestMatch} = await checkIfTextExist(text, embeddings);
+            const threshold = 0.70;
+            if(bestScore < threshold){
+                return ({
+                    content : [{type : "text", text : `${bestScore}`}]
+                })
+            } else {
+                const goalProgress = await generateGoalProgress(text)
+                bestMatch.goalProgress = goalProgress;
+                console.log(bestMatch.text)
+                await bestMatch.save();
+            }
+
+            return ({
+                content : [{type : "text", text : "Goal Progress updated successfully"}]
+            })
+        } catch (error) {
+            return({
+                content : [{type : "text", text : "Error while updating goal Progress"}]
             })
         }
     }
