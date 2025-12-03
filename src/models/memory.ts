@@ -42,9 +42,6 @@ const memorySchema = new mongoose.Schema({
     },
     habbitFrequency : {
         type : String,
-        enum : [
-            "daily", "weekly", "monthly", "custome", "none"
-        ],
         default : "none"
     },
     habbitStreak : {
