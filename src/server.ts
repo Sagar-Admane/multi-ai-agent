@@ -342,6 +342,8 @@ server.registerTool(
                 bestMatch.category = category;
 
                 await bestMatch.save();
+
+                if(isHabbitOrGoal==="habit") await tryLinkHabitToGoal(bestMatch)
             } else {
                 const isGoal = isHabbitOrGoal==="goal";
                 const isHabbit = isHabbitOrGoal=="habit";
@@ -362,6 +364,8 @@ server.registerTool(
                     memory.habbitFrequency = habbitFrequency
                 }
                 await memory.save()
+
+                if(isHabbit) await tryLinkHabitToGoal(memory);
             }
 
             return({
