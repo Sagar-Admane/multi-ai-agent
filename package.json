@@ -5,13 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "server:build": "tsc",
-    "server:build:watch": "tsc --watch",
-    "server:dev": "tsx src/server.ts",
-    "server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector@0.15.0 npm run server:dev",
-    "server:test": "tsx ./src/github.ts",
+    "memory_server:build": "tsc",
+    "memory_server:build:watch": "tsc --watch",
+    "memory_server:dev": "tsx src/server.ts",
+    "memory_server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector@0.15.0 npm run server:dev",
+    "memory_server:test": "tsx ./src/github.ts",
     "client:mcp": "cd build && node client.js",
-    "client:dev": "tsx src/client.ts"
+    "client:dev": "tsx src/client.ts",
+    "httpServer:dev" : "tsx src/index.ts"
   },
   "keywords": [],
   "author": "",
