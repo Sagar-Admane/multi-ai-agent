@@ -1,0 +1,69 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -440,
+        -40
+      ],
+      "id": "d2308fff-5d05-46a6-ab03-81770a420876",
+      "name": "Telegram Trigger",
+      "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
+      "credentials": {
+        "telegramApi": {
+          "id": "eS3T8uw119iZWjWj",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://68bbfb9a4e3a.ngrok-free.app/getIntent",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.message.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -220,
+        -40
+      ],
+      "id": "baa462f9-41b5-41f8-b613-b07c0eae3fbd",
+      "name": "HTTP Request"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0653f9ad6e4e2a80850b3ee9d155da7e49a68c6803c3a14f93c8f5e136ea8c08"
+  }
+}
