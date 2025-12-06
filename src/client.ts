@@ -1,9 +1,10 @@
 import { Client } from "@modelcontextprotocol/sdk/client"
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import express from "express"
+import route from "../src/routing/memoryRoutes.js"
 
-const app = express()
-app.use(express.json())
+const clientApp = express()
+clientApp.use(express.json())
 
 export const mcp = new Client({
     name : "MCP_CLIENT",
@@ -14,9 +15,11 @@ export const mcp = new Client({
     }
 })
 
+clientApp.use("/memory", route)
+
 const transport = new StdioClientTransport({
-    command : "node",
-    args : ["build/server.js"],
+    command : "npm",
+    args : ["run", "memory_server:dev"],
     stderr : "ignore"
 })
 
@@ -25,6 +28,8 @@ export async function main(){
     console.log("MCP CLinet connected successfully")
 }
 
-app.listen(2485, () => {
-    console.log("CLient Started")
+main();
+
+clientApp.listen(3000, () => {
+    console.log("APplication started on port : 2485")
 })
