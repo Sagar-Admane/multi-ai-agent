@@ -102,9 +102,10 @@ server.registerTool(
                 score : cosineSimilarity(queryEmbedding, m.embeddings)
             }))
             scored.sort((a, b) => b.score - a.score);
+            const response = scored.slice(0, topK)[0].memory.text;
 
             return{
-                content : [{type : "text", text : `${scored.slice(0, topK)}`}]
+                content : [{type : "text", text : `${response}`}]
             }
         } catch (error) {
             return{
