@@ -1,10 +1,17 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 import env from "dotenv"
+import OpenAI from "openai";
+import cleanJSON from "../utils/utils.js";
 env.config()
 
 const google = createGoogleGenerativeAI({
     apiKey : process.env.GEMINI_API_KEY
+})
+
+const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey : process.env.openrouter,
 })
 
 export async function intentOfText(req : any, res : any){
@@ -65,14 +72,19 @@ Return ONLY one word: the intent name.
 ### Now classify the following user text:
 "${text}"
 `
-        const response = await generateText({
-            model : google("gemini-2.0-flash-lite"),
-            prompt : `${prompt}`
+        const response = await openai.chat.completions.create({
+         model : "google/gemma-2-9b-it",
+         messages : [
+            {
+               role : "user",
+               content : prompt
+            }
+         ]
         })
 
-        console.log(response.text)
+        console.log(cleanJSON(response.choices[0].message.content));
         return res.json({
-            intent : response.text.trim(),
+            intent : cleanJSON(response.choices[0].message.content),
             text : text
         })
     } catch (error) {

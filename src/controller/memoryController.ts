@@ -22,7 +22,7 @@ export async function saveMemory(req : any, res : any){
         return res.json({
             text : req.body.text,
             intent : req.body.intent,
-            message : "Saved in memory successfully"
+            message : response
         })
     } catch (error) {
         res.error({
