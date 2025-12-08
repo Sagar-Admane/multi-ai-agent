@@ -59,7 +59,6 @@ server.registerTool(
                     await bestMatch.save();
                 }
             } else {
-                if(importanceScore > 1){
                     const memory = new Memory({
                     text : text,
                     embeddings : embedding,
@@ -67,9 +66,10 @@ server.registerTool(
                     tags : tags
                 })
                 await memory.save();
-                }
+
+                var ai_response : any = `await generateAIRespone(text)`
             }
-            const ai_response = await generateAIRespone(text)
+            ai_response = await generateAIRespone(text)
 
             return{
                 content : [{type : "text", text : `${ai_response} `}]
@@ -77,7 +77,7 @@ server.registerTool(
 
         } catch (error) {
             return{
-                content : [{type:"text", text : "Error while saving the memory"}]
+                content : [{type:"text", text : `${error}`}]
             }
         }
     }

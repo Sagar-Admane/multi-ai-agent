@@ -43,7 +43,7 @@ export async function generateTasks(text : string){
 }
 
 
-export async function generateEmbeddings(text : string){
+export async function generateEmbeddings(text : string) : Promise<number[]>{
     try {
         const response = await openai.embeddings.create({
             model : "text-embedding-3-small",
@@ -53,7 +53,7 @@ export async function generateEmbeddings(text : string){
         console.log(response.data[0].embedding);
         return response.data[0].embedding;
     } catch (error) {
-        return error
+        return []
     }
 }
 
@@ -263,6 +263,7 @@ Return ONLY the final date or "none".
             ]
         })
             console.log(cleanJSON(response.choices[0].message.content))
+            return new Date(cleanJSON(response.choices[0].message.content))
 
     } catch (error) {
         const date = new Date().toISOString().split("T")[0];
