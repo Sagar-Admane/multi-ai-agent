@@ -1,12 +1,14 @@
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { embed, generateText } from "ai";
+import OpenAI from "openai"
 import env from "dotenv"
-
+import { createGoogleGenerativeAI } from "@ai-sdk/google"
+import { generateText } from "ai"
 env.config()
 
-const google = createGoogleGenerativeAI({
-    apiKey : process.env.GEMINI_API_KEY 
+const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey : process.env.openrouter,
 })
+
 
 export async function generateGoalProgress(text){
 
@@ -30,15 +32,29 @@ User update: "${text}"
 `
 
     try {
-        const response = await generateText({
-            model : google("gemini-2.0-flash"),
-            prompt : prompt
+        const response = await openai.chat.completions.create({
+            model : "meta-llama/llama-3.1-8b-instruct",
+            messages : [
+                {
+                    role : "user",
+                    content : prompt
+                }
+            ]
         })
-        console.log(parseInt(response.text))
-        return response.text;
+        console.log(parseInt(cleanJSON(response.choices[0].message.content)));
+        return parseInt(cleanJSON(response.choices[0].message.content));
     } catch (error) {
         return 0
     }
 }
 
-generateGoalProgress("I have learnt dsa and finished only array from my whole dsa syllabus");
+function cleanJSON(str) {
+    return str
+        .replace(/```json/gi, "")
+        .replace(/```/g, "")
+        .replace(/\n/g, "")
+        .replace(/\r/g, "")
+        .trim();
+}
+
+generateGoalProgress("I have completed learning half of my syllabus")

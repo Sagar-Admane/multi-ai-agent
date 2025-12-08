@@ -10,15 +10,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -440,
-        -40
+        0,
+        0
       ],
-      "id": "d2308fff-5d05-46a6-ab03-81770a420876",
+      "id": "afbf09a7-537d-49ad-8446-d477792bd195",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
       "credentials": {
         "telegramApi": {
-          "id": "eS3T8uw119iZWjWj",
+          "id": "mbuxp16sgft6BLHq",
           "name": "Telegram account"
         }
       }
@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://68bbfb9a4e3a.ngrok-free.app/getIntent",
+        "url": "https://meals-nav-maintenance-blocking.trycloudflare.com/getIntent",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -41,11 +41,61 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -220,
-        -40
+        220,
+        0
       ],
-      "id": "baa462f9-41b5-41f8-b613-b07c0eae3fbd",
+      "id": "e90bbac8-cbb7-46e3-8681-4e546e011c5f",
       "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://copyright-steven-variety-said.trycloudflare.com/memory/{{ $json.intent }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "intent",
+              "value": "={{ $json.intent }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "id": "afbbb938-59d6-480b-bdb7-818dd08c5535",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "chatId": "1180173785",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        660,
+        0
+      ],
+      "id": "b6acd6e3-6431-4711-9c19-2f2f6e29068d",
+      "name": "Telegram",
+      "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
+      "credentials": {
+        "telegramApi": {
+          "id": "mbuxp16sgft6BLHq",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "connections": {
@@ -54,6 +104,28 @@
         [
           {
             "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
             "type": "main",
             "index": 0
           }

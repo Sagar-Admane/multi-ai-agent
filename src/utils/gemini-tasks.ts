@@ -1,66 +1,92 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { embed, generateText } from "ai";
+import OpenAI from "openai";
+import cleanJSON from "./utils.js";
 
-const google = createGoogleGenerativeAI({
-    apiKey : process.env.GEMINI_API_KEY 
+const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey : process.env.openrouter,
 })
 
-export async function generateTasks(text : string) {
-    const response = await generateText({
-        model : google("gemini-2.0-flash"),
-        prompt : `Extract 3-5 concise keywords from this text, as an array of strings : ${text} `
+export async function generateTasks(text : string){
+    const response1 = await openai.chat.completions.create({
+        model : "google/gemma-2-9b-it",
+        messages : [
+            {
+                "role" : "user",
+                "content" : `Extract 3-5 concise keywords from this text, as an array of strings : ${text} `
+            }
+        ]
     })
 
-    var tags : [string] = JSON.parse(response.text.replace(/```/g, "").trim().replace("json",``).trim())
-
-    const response1 = await generateText({
-        model : google("gemini-2.0-flash"),
-        prompt : `Claasify the following text based on the categories I am providing. If none of them matched give me the category. Do remeber to provide the response in single word : 
+    const response2 = await openai.chat.completions.create({
+        model : "google/gemma-2-9b-it",
+        messages : [{
+            role : "user",
+            content : `Claasify the following text based on the categories I am providing. If none of them matched give me the category. Do remeber to provide the response in single word : 
         text : ${text},
         categories : profile, preference, goal, habit, task, knowledge, health, finance, schedule, episodic, relationship, other`
+        }]
     })
 
-    return {
-        tags : tags,
-        category : response1.text
-    };
-}
+    const rawJson = response1.choices[0].message.content;
+    const cleaned = cleanJSON(rawJson);
+    console.log(cleaned)
 
-export async function generateEmbeddings(text: string) : Promise<number[]>{
-    try {
+    const rawJson1 = response2.choices[0].message.content;
+    const cleaned1 = cleanJSON(rawJson1);
 
-        const {embedding} = await embed({
-            model : google.textEmbeddingModel("text-embedding-004"),
-            value : text
-        })
-
-        return embedding;
-
-    } catch (error) {
-        console.log("Error while generating the embedding");
-        return [];
+    return { 
+        tags : cleaned,
+        category : cleaned1
     }
 }
 
 
-export async function generateAIRespone(text: string){
+export async function generateEmbeddings(text : string){
     try {
-        const response = await generateText({
-            model: google("gemini-2.0-flash"),
-            prompt : `Give me a simple no further moving conversational response for the following text : ${text}`
+        const response = await openai.embeddings.create({
+            model : "text-embedding-3-small",
+            input : text
         })
 
-        return response.text.trim();
+        console.log(response.data[0].embedding);
+        return response.data[0].embedding;
     } catch (error) {
-        return error;
+        return error
+    }
+}
+
+export async function generateAIRespone(text : string){
+    try {
+        const response = await openai.chat.completions.create({
+            model : "google/gemma-2-9b-it",
+            messages : [
+                {
+                    role : "user",
+                    content : `Give me a simple no further moving conversational response for the following text : ${text}`
+                }
+            ]
+        })
+
+        const res = response.choices[0].message.content;
+        console.log(cleanJSON(res))
+        return res;
+    } catch (error) {
+        console.log(error)
+        return error
     }
 }
 
 export async function generateImportanceScore(text : string) : Promise<number> {
     try {
-        const response = await generateText({
-            model : google("gemini-2.0-flash"),
-            prompt : `
+
+        const response = await openai.chat.completions.create({
+            model : "google/gemma-2-9b-it",
+            messages : [
+                {
+                    role : "user",
+                    content : `
                 Rate the importance of this memory on a scale of 1-5:
                 1 = unimportant
                 5 = critical / permanent
@@ -68,9 +94,13 @@ export async function generateImportanceScore(text : string) : Promise<number> {
                 Memory: "${text}"
 
                 Remember to return only the number (1-5).`
+                }
+            ]
         })
 
-        return parseInt(response.text.trim());
+        console.log(cleanJSON(response.choices[0].message.content));
+        const result = cleanJSON(response.choices[0].message.content);
+        return parseInt(result);
 
     } catch (error) {
         return 0;
@@ -79,26 +109,62 @@ export async function generateImportanceScore(text : string) : Promise<number> {
 
 
 export async function genereateRelationship(text : string){
-        const personId = await generateText({
-            model : google("gemini-2.0-flash"),
-            prompt : `Determine the relationship of the main subject in the text with the user (Sagar).
-                    If the main subject refers to ‘I’, ‘me’, or ‘Sagar’, or 'my' return user.
-                    Otherwise, return friend.
-                    Output only one word: user or friend.
-                    Text: ${text}`
-                })
 
+        const personId = await openai.chat.completions.create({
+            model : "google/gemma-2-9b-it",
+            messages : [
+                {
+                    role : "user",
+                    content : `Extract the relationship of the main subject in the text with the user (Sagar).
 
-        const name = await generateText({
-            model : google("gemini-2.0-flash"),
-            prompt : `Based on the following text, if mention in the text return me the name of the main Subject user, if not mention return me with the empty string :
-                    Now but when the name is I or me or user or my return as "Sagar"
-                    ${text}. Return response in one word`
+Rules:
+- If the subject refers to: I, me, my, mine, myself, Sagar → return: "user"
+- If the text mentions a specific relationship (mom, mother, dad, father, brother, sister,
+  friend, cousin, teacher, boss, girlfriend, boyfriend, wife, husband, colleague, etc.)
+  → return exactly that relationship (lowercase).
+- If none of the above appear → return: "unknown".
+
+Strict Output Rules:
+- Return exactly ONE word.
+- No newline, no extra spaces, no punctuation.
+- Output must be on a single line.
+
+Text: ${text}
+
+Return only the final one-word answer.`
+                }
+            ]
         })
 
+        console.log(cleanJSON(personId.choices[0].message.content));
+
+
+
+        const name = await openai.chat.completions.create({
+            model : "google/gemma-2-9b-it",
+            messages : [
+                {
+                    role : "user",
+                    content : `
+Extract the main person's name.
+Rules:
+- If text uses I, me, my, user, myself → return: Sagar
+- If no name appears → return empty string ""
+- Output must be exactly ONE word or empty quotes "".
+
+Text: ${text}
+
+Return ONLY the name with no explanation.
+                `
+                }
+            ]
+        })
+
+        console.log(cleanJSON(name.choices[0].message.content));
+
         return {
-            personId : personId.text,
-            name : name.text
+            personId : cleanJSON(personId.choices[0].message.content),
+            name : cleanJSON(name.choices[0].message.content)
         }
     
 }
@@ -106,18 +172,25 @@ export async function genereateRelationship(text : string){
 
 export async function detectHabitOrGoal(text : String){
     try {
-        const response = await generateText({
-            model : google("gemini-2.0-flash"),
-            prompt : `You are a classifier. Decide whether the following user statement is:
+
+        const response = await openai.chat.completions.create({
+            model : "google/gemma-2-9b-it",
+            messages : [
+                {
+                    role : "user",
+                    content : `You are a classifier. Decide whether the following user statement is:
                     - a GOAL (long-term objective, multi-step, months/weeks),
                     - a HABIT (recurring action or routine, daily/weekly),
 
                     Return exactly one word: goal, habit, or none.
 
                     Statement: ${text}`
+                }
+            ]            
         })
+        console.log(cleanJSON(response.choices[0].message.content));
+        return cleanJSON(response.choices[0].message.content);
 
-        return response.text.trim();
     } catch (error) {
         return "Error while detecting habit or Goal"
     }
@@ -126,15 +199,22 @@ export async function detectHabitOrGoal(text : String){
 
 export async function extractHabitFrequency(text : String){
     try {
-        const response = await generateText({
-            model : google("gemini-2.0-flash"),
-            prompt : `Extract the repetition frequency conveyed by this statement. Return one word:
+        const response = await openai.chat.completions.create({
+            model : "google/gemma-2-9b-it",
+            messages : [
+                {
+                    role : "user",
+                    content : `Extract the repetition frequency conveyed by this statement. Return one word:
                     "daily, weekly, monthly, custom, none"
 
                     Statement: ${text} `
-            });
+                }
+            ]
+        })
 
-            return response.text.trim()
+
+            console.log(cleanJSON(response.choices[0].message.content))
+            return cleanJSON(response.choices[0].message.content)
     } catch (error) {
         return "Error while extracting habitFrequency"
     }
@@ -143,26 +223,52 @@ export async function extractHabitFrequency(text : String){
 export async function extractGoalDeadline(text : string){
     try {
         const date = new Date().toISOString().split("T")[0];
-        const response = await generateText({
-            model : google("gemini-2.0-flash"),
-            prompt :   `Extract the goal deadline from the following text.
-                    Return the deadline as a date in YYYY-MM-DD format.
-                    If the text mentions words like “today”, “tomorrow”, or “next week”, convert them to an actual date in YYYY-MM-DD format based on the current date.
-                    If no deadline is mentioned, return "none".
-                    Output must contain only the date (one token, no explanation, no punctuation).
-                    If the days is in like 30 days or in 20 days convert it into into YYYY-MM-DD format with the help of current date.
-                    Current date : ${date}
-                    Text: ${text}`
-                })
-            const returedDate = new Date(response.text)
-            return returedDate;
+
+        const response =  await openai.chat.completions.create({
+            model : "meta-llama/llama-3.1-8b-instruct",
+            messages : [
+                {
+                    role : "user",
+                    content : `
+Your task is to extract a deadline.
+
+Return ONLY a valid ISO date (YYYY-MM-DD) or "none".
+
+STRICT RULES:
+- No explanation.
+- No code.
+- No examples.
+- No comments.
+- No extra words.
+- No newline.
+- Output must be EXACTLY one of:
+  - a date in YYYY-MM-DD format
+  - the word: none
+
+Interpretation Rules:
+- "today" = Current date
+- "tomorrow" = Current date + 1 day
+- "next week" = current date + 7 days
+- "next month" = last day of next month
+- "end of month" = last day of current month
+- "in X days" = add X days
+- If ambiguous → return "none"
+
+Current date: ${date}
+Text: ${text}
+
+Return ONLY the final date or "none".
+`
+                }
+            ]
+        })
+            console.log(cleanJSON(response.choices[0].message.content))
 
     } catch (error) {
         const date = new Date().toISOString().split("T")[0];
         return new Date(date);
     }
 }
-
 
 export async function generateGoalProgress(text : string){
 
@@ -186,11 +292,16 @@ User update: "${text}"
 `
 
     try {
-        const response = await generateText({
-            model : google("gemini-2.0-flash"),
-            prompt : prompt
+        const response = await openai.chat.completions.create({
+            model : "meta-llama/llama-3.1-8b-instruct",
+            messages : [
+                {
+                    role : "user",
+                    content : prompt
+                }
+            ]
         })
-        return parseInt(response.text);
+        return parseInt(cleanJSON(response.choices[0].message.content));
     } catch (error) {
         return 0
     }

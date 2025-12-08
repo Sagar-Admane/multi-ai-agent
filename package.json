@@ -12,7 +12,7 @@
     "memory_server:test": "tsx ./src/github.ts",
     "client:mcp": "cd build && node client.js",
     "client:dev": "tsx src/client.ts",
-    "httpServer:dev" : "tsx src/index.ts"
+    "httpServer:dev": "tsx src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +28,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "mongoose": "^9.0.0",
+    "openai": "^6.10.0",
     "tsx": "^4.20.6",
     "zod": "^4.1.13"
   }

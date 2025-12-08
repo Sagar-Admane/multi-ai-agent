@@ -5,12 +5,12 @@ const google = createGoogleGenerativeAI({
 });
 export async function generateTasks(text) {
     const response = await generateText({
-        model: google("gemini-2.0-flash"),
+        model: google("gemini-2.0-flash-lite"),
         prompt: `Extract 3-5 concise keywords from this text, as an array of strings : ${text} `
     });
     var tags = JSON.parse(response.text.replace(/```/g, "").trim().replace("json", ``).trim());
     const response1 = await generateText({
-        model: google("gemini-2.0-flash"),
+        model: google("gemini-2.0-flash-lite"),
         prompt: `Claasify the following text based on the categories I am providing. If none of them matched give me the category. Do remeber to provide the response in single word : 
         text : ${text},
         categories : profile, preference, goal, habit, task, knowledge, health, finance, schedule, episodic, relationship, other`
@@ -36,7 +36,7 @@ export async function generateEmbeddings(text) {
 export async function generateAIRespone(text) {
     try {
         const response = await generateText({
-            model: google("gemini-2.0-flash"),
+            model: google("gemini-2.0-flash-lite"),
             prompt: `Give me a simple no further moving conversational response for the following text : ${text}`
         });
         return response.text.trim();
@@ -48,7 +48,7 @@ export async function generateAIRespone(text) {
 export async function generateImportanceScore(text) {
     try {
         const response = await generateText({
-            model: google("gemini-2.0-flash"),
+            model: google("gemini-2.0-flash-lite"),
             prompt: `
                 Rate the importance of this memory on a scale of 1-5:
                 1 = unimportant
@@ -66,7 +66,7 @@ export async function generateImportanceScore(text) {
 }
 export async function genereateRelationship(text) {
     const personId = await generateText({
-        model: google("gemini-2.0-flash"),
+        model: google("gemini-2.0-flash-lite"),
         prompt: `Determine the relationship of the main subject in the text with the user (Sagar).
                     If the main subject refers to ‘I’, ‘me’, or ‘Sagar’, or 'my' return user.
                     Otherwise, return friend.
@@ -74,7 +74,7 @@ export async function genereateRelationship(text) {
                     Text: ${text}`
     });
     const name = await generateText({
-        model: google("gemini-2.0-flash"),
+        model: google("gemini-2.0-flash-lite"),
         prompt: `Based on the following text, if mention in the text return me the name of the main Subject user, if not mention return me with the empty string :
                     Now but when the name is I or me or user or my return as "Sagar"
                     ${text}. Return response in one word`
@@ -87,7 +87,7 @@ export async function genereateRelationship(text) {
 export async function detectHabitOrGoal(text) {
     try {
         const response = await generateText({
-            model: google("gemini-2.0-flash"),
+            model: google("gemini-2.0-flash-lite"),
             prompt: `You are a classifier. Decide whether the following user statement is:
                     - a GOAL (long-term objective, multi-step, months/weeks),
                     - a HABIT (recurring action or routine, daily/weekly),
@@ -105,7 +105,7 @@ export async function detectHabitOrGoal(text) {
 export async function extractHabitFrequency(text) {
     try {
         const response = await generateText({
-            model: google("gemini-2.0-flash"),
+            model: google("gemini-2.0-flash-lite"),
             prompt: `Extract the repetition frequency conveyed by this statement. Return one word:
                     "daily, weekly, monthly, custom, none"
 
@@ -121,7 +121,7 @@ export async function extractGoalDeadline(text) {
     try {
         const date = new Date().toISOString().split("T")[0];
         const response = await generateText({
-            model: google("gemini-2.0-flash"),
+            model: google("gemini-2.0-flash-lite"),
             prompt: `Extract the goal deadline from the following text.
                     Return the deadline as a date in YYYY-MM-DD format.
                     If the text mentions words like “today”, “tomorrow”, or “next week”, convert them to an actual date in YYYY-MM-DD format based on the current date.
@@ -160,7 +160,7 @@ User update: "${text}"
 `;
     try {
         const response = await generateText({
-            model: google("gemini-2.0-flash"),
+            model: google("gemini-2.0-flash-lite"),
             prompt: prompt
         });
         return parseInt(response.text);
