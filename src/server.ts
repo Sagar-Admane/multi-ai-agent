@@ -137,7 +137,7 @@ server.registerTool(
             scored.sort((a,b) => b.score - a.score)
             const matches = scored.slice(0, 3);
 
-            const toDelete = matches.filter(m => m.score >= 0.7);
+            const toDelete = matches.filter(m => m.score >= 0.6);
 
             const best = toDelete[0].memory;
             await Memory.findByIdAndDelete(best._id);
@@ -147,7 +147,7 @@ server.registerTool(
             }
         } catch (error) {
             return {
-                content : [{type : "text", text : "Error while deleting from memory"}]
+                content : [{type : "text", text : `${error}`}]
             }
         }
     }

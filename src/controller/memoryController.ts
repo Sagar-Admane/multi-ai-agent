@@ -52,8 +52,31 @@ export async function queryMemory(req : any, res : any){
         return res.json({
             text : req.body.text,
             intent : req.body.intent,
-            message : `${response.content[0].text}`
+            message : `${(response.content as {text : string}[])[0].text}`
         })
+    } catch (error) {
+        res.error({
+            error : `Error while saving the memory : ${error}`
+        })
+    }
+}
+
+export async function deleteMemory(req : any, res : any){
+    try {
+        const tool = req.body.intent;
+        const response = await mcp.callTool({
+            name : tool,
+            arguments : {
+                text : req.body.text
+            }
+        })
+
+        return res.json({
+            text : req.body.text,
+            intent : req.body.intent,
+            message : `${(response.content as {text : string}[])[0].text}`
+        })
+
     } catch (error) {
         res.error({
             error : `Error while saving the memory : ${error}`
