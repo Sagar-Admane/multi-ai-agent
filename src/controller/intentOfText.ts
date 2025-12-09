@@ -17,61 +17,58 @@ const openai = new OpenAI({
 export async function intentOfText(req : any, res : any){
     try {
         const text = req.body.text;
-        const prompt = `You are an intent classifier for a personal AI memory system.
+        const prompt = `You are an intent classifier.
 
-Your job: Read the user text and return ONLY one intent from the list below.
-Do NOT return explanations or extra words. Return only the intent name exactly.
+Return EXACTLY one of the following intents and nothing else:
+save-memory
+query-memory
+delete-memory
+episodic-memory
+query-episodic
+save-relationship
+relationship-query
+save-goalorhabbit
+update-goalProgress
+habit-checkin
 
-Here are the available intents and what they mean:
+RULES:
 
-1. save-memory  
-   - When the user shares information they want remembered.
-   - Example: “I moved to a new apartment”, “My favorite food is dosa”.
+1. episodic-memory is ONLY for events that happened at a specific time 
+   (today, yesterday, last week, this morning, etc.)
+   These describe experiences or activities.
 
-2. query-memory  
-   - When the user asks for something they saved earlier.
-   - Example: “What did I say about my job?”, “Do you remember my preferences?”
+   Examples of episodic-memory:
+   - “I went to college today.”
+   - “Yesterday I met my friend.”
+   - “This morning I drank coffee.”
 
-3. delete-memory  
-   - When user wants to delete something they stored.
-   - Example: “Forget my old phone number”, “Delete that memory about gym”.
+2. If the text is a personal fact, identity, preference, or long-term information,
+   classify it as save-memory, NOT episodic-memory.
 
-4. episodic-memory  
-   - When user describes a personal experience, event, or story.
-   - Example: “Today I went to the mall with friends”.
+   Examples of save-memory:
+   - “I am a student in Lovely Professional University.”
+   - “My favorite food is pizza.”
+   - “I live in Punjab.”
+   - “My birthday is on July 14.”
 
-5. query-episodic  
-   - When user asks about things that happened or events they shared earlier.
-   - Example: “What did I do last week?”, “Do you remember what I said yesterday?”
+3. Code, logs, configs, tool definitions, or technical text = save-memory.
 
-6. save-relationship  
-   - When the text mentions a person and some info about them.
-   - Example: “My friend Rahul loves cricket”.
+4. Output ONLY the exact intent name. No punctuation. No extra text.
 
-7. relationship-query  
-   - When user asks something about a person stored earlier.
-   - Example: “What do you know about Rahul?”, “Tell me facts about John”.
+5. If the text is asking about the user's OWN past info or memories 
+(e.g., “Where did I work?”, “Which company I interned at?”, 
+“What did I say about my projects?”, “What is my background?”),
+then ALWAYS classify it as query-memory.
+It is NOT a relationship-query unless the question is about SOMEONE ELSE.
 
-8. save-goalorhabbit  
-   - When user states a new goal or habit.
-   - Example: “I want to learn DSA in 30 days”, “I will drink water daily”.
+Examples:
+“What did Rahul study?” → relationship-query
+“What did I study?” → query-memory
+“In which company I was intern?” → query-memory
 
-9. update-goalProgress  
-   - When user reports progress about an existing goal.
-   - Example: “I finished 20% of my DSA prep”, “Today I studied arrays”.
+Now classify this:
+"{${text}}"`
 
-10. habit-checkin  
-   - When user marks a daily habit check-in.
-   - Example: “I completed today’s meditation session.”
-
----
-
-### Output format:
-Return ONLY one word: the intent name.
-
-### Now classify the following user text:
-"${text}"
-`
         const response = await openai.chat.completions.create({
          model : "google/gemma-2-9b-it",
          messages : [

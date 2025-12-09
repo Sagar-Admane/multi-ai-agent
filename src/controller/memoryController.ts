@@ -17,7 +17,7 @@ export async function saveMemory(req : any, res : any){
             })
         }
 
-        console.log(response)
+        console.log(response.json);
 
         return res.json({
             text : req.body.text,
