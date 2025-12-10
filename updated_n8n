@@ -13,12 +13,12 @@
         0,
         0
       ],
-      "id": "01ad7ee0-8944-4e3c-9050-fdc28f4c0756",
+      "id": "65533463-37b6-45f5-b299-fe2883313930",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
       "credentials": {
         "telegramApi": {
-          "id": "ta5duv5LPj2dPJRy",
+          "id": "iWcx9KuRISWLWgIC",
           "name": "Telegram account"
         }
       }
@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://technology-mba-vhs-reading.trycloudflare.com/getIntent",
+        "url": "https://designing-recall-acre-watson.trycloudflare.com/getIntent",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -44,13 +44,13 @@
         220,
         0
       ],
-      "id": "21b37248-13c1-4d61-8268-e0c9dc7d52a2",
+      "id": "83674cd6-1717-43ec-8101-5e33978e5655",
       "name": "HTTP Request"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://tier-routines-faq-solving.trycloudflare.com/memory/{{ $json.intent }}",
+        "url": "=https://miami-expectations-gabriel-appreciated.trycloudflare.com/memory/{{ $json.intent }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -72,7 +72,7 @@
         440,
         0
       ],
-      "id": "7ec09320-77cf-46fa-97e6-b0ef56d57698",
+      "id": "0b0e9e58-68e8-4a8b-9f96-7e6a9b35baa9",
       "name": "HTTP Request1"
     },
     {
@@ -87,12 +87,12 @@
         660,
         0
       ],
-      "id": "baa83e55-e491-41a4-9a33-cd39b6ec5741",
+      "id": "b34cecf7-3a8b-4815-99d2-c4b332da2ad4",
       "name": "Telegram",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
       "credentials": {
         "telegramApi": {
-          "id": "ta5duv5LPj2dPJRy",
+          "id": "iWcx9KuRISWLWgIC",
           "name": "Telegram account"
         }
       }
