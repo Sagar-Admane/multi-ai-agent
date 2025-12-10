@@ -260,7 +260,7 @@ server.registerTool(
 
         } catch (error) {
             return{
-                content : [{type : "text", text : "Error saving relationship"}]
+                content : [{type : "text", text : `${error}`}]
             }
         }
     }

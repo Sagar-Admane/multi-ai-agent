@@ -9,19 +9,25 @@ const openai = new OpenAI({
     apiKey : process.env.openrouter,
 })
 
-
-export async function generateEmbeddings(text){
+async function generateRelation(text){
     try {
-        const response = await openai.embeddings.create({
-            model : "text-embedding-3-small",
-            input : text
+        const response = await openai.chat.completions.create({
+            model : "tngtech/deepseek-r1t2-chimera:free",
+            messages : [
+                {
+                    role : "user",
+                    content : `In the below text based on who i am referring to determine the name of the referred person : ${text}
+                    Rules - 
+                    Do not add anything extra
+                    Do not add any extra symbol
+                    Just share the name in the response`
+                }
+            ]
         })
 
-        console.log(response.data[0].embedding);
-        return response.data[0].embedding;
+        console.log(response.choices[0].message.content);
     } catch (error) {
         console.log(error)
-        return error
     }
 }
 
@@ -34,4 +40,6 @@ function cleanJSON(str) {
         .trim();
 }
 
-generateEmbeddings("I have completed learning half of my syllabus")
+// generateEmbeddings("I have completed learning half of my syllabus")
+
+generateRelation("My mother's name is Madhuri")
