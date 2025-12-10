@@ -25,3 +25,7 @@ export async function queryEpisodic(req: any, res : any){
 export async function saveRelationship(req : any, res : any){
     handleMemoryTool(req, res);
 }
+
+export async function relationshipQuery(req : any, res : any){
+    handleMemoryTool(req, res);
+}
