@@ -197,6 +197,7 @@ server.registerTool(
     },
     async({text}) => {
         try {
+            const topK = 3;
             const embedding : number[]= await generateEmbeddings(text);
 
             const memories = await EpisodicMemory.find();
@@ -207,9 +208,10 @@ server.registerTool(
             }))
 
             scored.sort((a,b) =>  b.score - a.score);
+            const response = scored.slice(0, topK)[0].memory.content;
 
             return{
-                content : [{type : "text", text :  `${scored.slice(0,3)}`}]
+                content : [{type : "text", text :  `${response}`}]
             }
 
 

@@ -31,43 +31,69 @@ save-goalorhabbit
 update-goalProgress
 habit-checkin
 
-RULES:
+RULES (strict priority order):
 
-1. episodic-memory is ONLY for events that happened at a specific time 
-   (today, yesterday, last week, this morning, etc.)
-   These describe experiences or activities.
+1. If the text describes a personal event that happened at a specific time
+(today, yesterday, last week, this morning, last night, etc.),
+classify as: episodic-memory.
 
-   Examples of episodic-memory:
+   Examples:
    - “I went to college today.”
    - “Yesterday I met my friend.”
-   - “This morning I drank coffee.”
 
-2. If the text is a personal fact, identity, preference, or long-term information,
-   classify it as save-memory, NOT episodic-memory.
+2. If the text ASKS about the user's own past events at a specific time,
+classify as: query-episodic.
 
-   Examples of save-memory:
-   - “I am a student in Lovely Professional University.”
+   Examples:
+   - “What did I do yesterday?”
+   - “Where did I go last week?”
+
+3. If the text is asking about the user's OWN general stored info 
+(not time-specific),
+classify as: query-memory.
+
+   Examples:
+   - “Where did I work?”
+   - “Which company I interned at?”
+   - “What is my background?”
+
+4. If the text is a personal fact, identity, biography, or long-term information,
+classify as: save-memory.
+
+   Examples:
+   - “I study at LPU.”
    - “My favorite food is pizza.”
    - “I live in Punjab.”
-   - “My birthday is on July 14.”
 
-3. Code, logs, configs, tool definitions, or technical text = save-memory.
+5. Questions about ANOTHER person → relationship-query.
+   Examples:
+   - “What does Rahul do?”
+   - “Where does John work?”
 
-4. Output ONLY the exact intent name. No punctuation. No extra text.
+6. Info ABOUT another person → save-relationship.
+   Examples:
+   - “My brother likes cricket.”
 
-5. If the text is asking about the user's OWN past info or memories 
-(e.g., “Where did I work?”, “Which company I interned at?”, 
-“What did I say about my projects?”, “What is my background?”),
-then ALWAYS classify it as query-memory.
-It is NOT a relationship-query unless the question is about SOMEONE ELSE.
+7. New goal or habit → save-goalorhabbit.
 
-Examples:
-“What did Rahul study?” → relationship-query
-“What did I study?” → query-memory
-“In which company I was intern?” → query-memory
+8. Progress update → update-goalProgress.
+
+9. Daily habit completion → habit-checkin.
+
+10. Explicit requests to forget/delete → delete-memory.
+
+11. Any code, logs, technical content → save-memory.
+
+Fallback rules (must be used if ambiguous):
+- If it looks like a retrieval about the user's past actions and contains time markers → "query-episodic".
+- If it uses "I/my/me" but no time marker and is a question → "query-memory".
+- Otherwise choose the closest intent from allowed list; do NOT output empty intent.
+
+Output ONLY the intent name. No punctuation. No explanations.
 
 Now classify this:
-"{${text}}"`
+"${text}"`
+
 
         const response = await openai.chat.completions.create({
          model : "google/gemma-2-9b-it",

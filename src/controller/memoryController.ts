@@ -1,85 +1,23 @@
 import { text } from "stream/consumers";
 import { mcp } from "../client.js";
+import { handleMemoryTool } from "../utils/helperFunction.js";
 
 export async function saveMemory(req : any, res : any){
-    try {
-        const tool = req.body.intent;
-        const response = await mcp.callTool({
-            name : `${tool}`,
-            arguments : {
-                text : req.body.text
-            }
-        })
-
-        if(!response){
-            return res.json({
-                message : "Unable to save the memory"
-            })
-        }
-
-        console.log(response.json);
-
-        return res.json({
-            text : req.body.text,
-            intent : req.body.intent,
-            message : response
-        })
-    } catch (error) {
-        res.error({
-            error : `Error while saving the memory : ${error}`
-        })
-    }
+   handleMemoryTool(req, res);
 }
 
 export async function queryMemory(req : any, res : any){
-    try {
-        const tool = req.body.intent;
-        const response = await mcp.callTool({
-            name : `${tool}`,
-            arguments : {
-                text : req.body.text
-            }
-        })
-
-        if(!response){
-            return res.json({
-                message : "Unable to query the memory"
-            })
-        }
-
-        console.log(response.content)
-
-        return res.json({
-            text : req.body.text,
-            intent : req.body.intent,
-            message : `${(response.content as {text : string}[])[0].text}`
-        })
-    } catch (error) {
-        res.error({
-            error : `Error while saving the memory : ${error}`
-        })
-    }
+    handleMemoryTool(req, res);
 }
 
 export async function deleteMemory(req : any, res : any){
-    try {
-        const tool = req.body.intent;
-        const response = await mcp.callTool({
-            name : tool,
-            arguments : {
-                text : req.body.text
-            }
-        })
+    handleMemoryTool(req, res);
+}
 
-        return res.json({
-            text : req.body.text,
-            intent : req.body.intent,
-            message : `${(response.content as {text : string}[])[0].text}`
-        })
+export async function episodicMemory(req : any, res : any){
+    handleMemoryTool(req, res);
+}
 
-    } catch (error) {
-        res.error({
-            error : `Error while saving the memory : ${error}`
-        })
-    }
+export async function queryEpisodic(req: any, res : any){
+    handleMemoryTool(req, res);
 }
