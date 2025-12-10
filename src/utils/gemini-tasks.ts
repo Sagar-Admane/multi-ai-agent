@@ -138,28 +138,19 @@ Return only the final one-word answer.`
 
         console.log(cleanJSON(personId.choices[0].message.content));
 
-
-
         const name = await openai.chat.completions.create({
-            model : "google/gemma-2-9b-it",
+            model : "tngtech/deepseek-r1t2-chimera:free",
             messages : [
                 {
                     role : "user",
-                    content : `
-Extract the main person's name.
-Rules:
-- If text uses I, me, my, user, myself → return: Sagar
-- If no name appears → return empty string ""
-- Output must be exactly ONE word or empty quotes "".
-
-Text: ${text}
-
-Return ONLY the name with no explanation.
-                `
+                    content : `In the below text based on who i am referring to determine the name of the referred person : ${text}
+                    Rules - 
+                    Do not add anything extra
+                    Do not add any extra symbol
+                    Just share the name in the response`
                 }
             ]
         })
-
         console.log(cleanJSON(name.choices[0].message.content));
 
         return {
