@@ -37,57 +37,40 @@ RULES (strict priority order):
 (today, yesterday, last week, this morning, last night, etc.),
 classify as: episodic-memory.
 
-   Examples:
-   - “I went to college today.”
-   - “Yesterday I met my friend.”
-
 2. If the text ASKS about the user's own past events at a specific time,
 classify as: query-episodic.
 
-   Examples:
-   - “What did I do yesterday?”
-   - “Where did I go last week?”
-
-3. If the text is asking about the user's OWN general stored info 
-(not time-specific),
+3. If the text is asking about the user's OWN general stored info (not time-specific),
 classify as: query-memory.
 
-   Examples:
-   - “Where did I work?”
-   - “Which company I interned at?”
-   - “What is my background?”
+4. If the text is a personal fact, identity, biography, or long-term information
+about the USER ONLY, classify as: save-memory.
 
-4. If the text is a personal fact, identity, biography, or long-term information,
-classify as: save-memory.
+4.5. If the text provides information ABOUT ANOTHER PERSON
+(family member, friend, colleague, etc.),
+classify as: save-relationship.
 
    Examples:
-   - “I study at LPU.”
-   - “My favorite food is pizza.”
-   - “I live in Punjab.”
+   - “My mother’s name is Madhuri.”
+   - “My brother likes cricket.”
+   - “My friend Rahul lives in Mumbai.”
 
 5. Questions about ANOTHER person → relationship-query.
-   Examples:
-   - “What does Rahul do?”
-   - “Where does John work?”
 
-6. Info ABOUT another person → save-relationship.
-   Examples:
-   - “My brother likes cricket.”
+6. New goal or habit → save-goalorhabbit.
 
-7. New goal or habit → save-goalorhabbit.
+7. Progress update → update-goalProgress.
 
-8. Progress update → update-goalProgress.
+8. Daily habit completion → habit-checkin.
 
-9. Daily habit completion → habit-checkin.
+9. Explicit requests to forget/delete → delete-memory.
 
-10. Explicit requests to forget/delete → delete-memory.
+10. Any code, logs, or technical content → save-memory.
 
-11. Any code, logs, technical content → save-memory.
-
-Fallback rules (must be used if ambiguous):
-- If it looks like a retrieval about the user's past actions and contains time markers → "query-episodic".
-- If it uses "I/my/me" but no time marker and is a question → "query-memory".
-- Otherwise choose the closest intent from allowed list; do NOT output empty intent.
+Fallback rules:
+- Time-marker + question about the user’s past → query-episodic.
+- “I/my/me” + question + no time marker → query-memory.
+- Otherwise choose the closest valid intent.
 
 Output ONLY the intent name. No punctuation. No explanations.
 
