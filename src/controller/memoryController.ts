@@ -21,3 +21,7 @@ export async function episodicMemory(req : any, res : any){
 export async function queryEpisodic(req: any, res : any){
     handleMemoryTool(req, res);
 }
+
+export async function saveRelationship(req : any, res : any){
+    handleMemoryTool(req, res);
+}
