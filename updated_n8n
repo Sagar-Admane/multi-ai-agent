@@ -13,12 +13,12 @@
         0,
         0
       ],
-      "id": "65533463-37b6-45f5-b299-fe2883313930",
+      "id": "549ec1aa-1f6a-44e5-aee0-a6d4615736a4",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
       "credentials": {
         "telegramApi": {
-          "id": "iWcx9KuRISWLWgIC",
+          "id": "xc0ak1nr1ABDqCvw",
           "name": "Telegram account"
         }
       }
@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://designing-recall-acre-watson.trycloudflare.com/getIntent",
+        "url": "https://trying-protein-lawn-manhattan.trycloudflare.com/getIntent",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -44,13 +44,13 @@
         220,
         0
       ],
-      "id": "83674cd6-1717-43ec-8101-5e33978e5655",
+      "id": "b24641fa-32a9-4648-9763-9f7127d89361",
       "name": "HTTP Request"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://miami-expectations-gabriel-appreciated.trycloudflare.com/memory/{{ $json.intent }}",
+        "url": "=https://tricks-scales-lanes-championship.trycloudflare.com/memory/{{ $json.intent }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -69,10 +69,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        440,
-        0
+        880,
+        180
       ],
-      "id": "0b0e9e58-68e8-4a8b-9f96-7e6a9b35baa9",
+      "id": "8fc532a6-ac0f-4b67-a4b4-623568190f10",
       "name": "HTTP Request1"
     },
     {
@@ -84,18 +84,65 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        660,
+        1100,
         0
       ],
-      "id": "b34cecf7-3a8b-4815-99d2-c4b332da2ad4",
+      "id": "132c6083-b46b-4862-a953-692aab9e4331",
       "name": "Telegram",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
       "credentials": {
         "telegramApi": {
-          "id": "iWcx9KuRISWLWgIC",
+          "id": "xc0ak1nr1ABDqCvw",
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3eeca3da-7157-403b-bc94-b52228cf937b",
+              "leftValue": "={{ $json.intent }}",
+              "rightValue": "goalorhabbit",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ],
+      "id": "7486647e-e2aa-4ba6-83d5-ba97f1604f33",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        860,
+        -140
+      ],
+      "id": "101511fa-35e6-4791-907c-f39456d38007",
+      "name": "HTTP Request2"
     }
   ],
   "connections": {
@@ -114,7 +161,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request1",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -126,6 +173,24 @@
         [
           {
             "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
             "type": "main",
             "index": 0
           }
