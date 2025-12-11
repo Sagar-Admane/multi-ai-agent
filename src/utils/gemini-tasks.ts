@@ -180,7 +180,9 @@ export async function detectHabitOrGoal(text : String){
                     - a HABIT (recurring action or routine, daily/weekly),
 
                     Return exactly one word: goal, habit, or none.
-
+                    STRICT RULES - 
+                    - No newline, no extra spaces, no punctuation.
+                    - Output must be on a single line.
                     Statement: ${text}`
                 }
             ]            
