@@ -10,15 +10,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        0,
-        0
+        -860,
+        140
       ],
-      "id": "549ec1aa-1f6a-44e5-aee0-a6d4615736a4",
+      "id": "a1e7a5c2-eb85-4f21-ae6c-c052a7212592",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
       "credentials": {
         "telegramApi": {
-          "id": "xc0ak1nr1ABDqCvw",
+          "id": "LuwauFPxtWfmZCMy",
           "name": "Telegram account"
         }
       }
@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://trying-protein-lawn-manhattan.trycloudflare.com/getIntent",
+        "url": "https://went-arena-principle-paid.trycloudflare.com/getIntent",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -41,10 +41,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        220,
-        0
+        -640,
+        140
       ],
-      "id": "b24641fa-32a9-4648-9763-9f7127d89361",
+      "id": "ca7454a8-f37d-4036-8c65-3bf4ebf66b18",
       "name": "HTTP Request"
     },
     {
@@ -69,10 +69,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        880,
-        180
+        20,
+        320
       ],
-      "id": "8fc532a6-ac0f-4b67-a4b4-623568190f10",
+      "id": "9266b512-01ac-47ec-922e-cb2ff3b5806d",
       "name": "HTTP Request1"
     },
     {
@@ -84,15 +84,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1100,
-        0
+        300,
+        320
       ],
-      "id": "132c6083-b46b-4862-a953-692aab9e4331",
+      "id": "ff46e9a4-0ff4-4281-8c6a-06bb027269af",
       "name": "Telegram",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
       "credentials": {
         "telegramApi": {
-          "id": "xc0ak1nr1ABDqCvw",
+          "id": "LuwauFPxtWfmZCMy",
           "name": "Telegram account"
         }
       }
@@ -110,7 +110,7 @@
             {
               "id": "3eeca3da-7157-403b-bc94-b52228cf937b",
               "leftValue": "={{ $json.intent }}",
-              "rightValue": "goalorhabbit",
+              "rightValue": "save-goalorhabbit",
               "operator": {
                 "type": "string",
                 "operation": "equals",
@@ -125,24 +125,137 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        440,
-        0
+        -420,
+        140
       ],
-      "id": "7486647e-e2aa-4ba6-83d5-ba97f1604f33",
+      "id": "d7a6edc5-4615-4846-bacd-435f08269858",
       "name": "If"
     },
     {
       "parameters": {
+        "method": "POST",
+        "url": "https://amenities-anatomy-struck-vat.trycloudflare.com/memory/goalOrHabbit",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=intent",
+              "value": "={{ $json.intent }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        860,
-        -140
+        0,
+        0
       ],
-      "id": "101511fa-35e6-4791-907c-f39456d38007",
+      "id": "71d2edf4-e1da-42a9-bf56-e0b13f4f395b",
       "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "da2066b0-0f4f-4e13-b00d-fee2206bd05e",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "habit",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "1ffecda0-bbe5-4364-93d8-c8c5df334088",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://amenities-anatomy-struck-vat.trycloudflare.com/memory/save-goalorhabbit",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "type",
+              "value": "={{ $json.type }}"
+            },
+            {
+              "name": "intent",
+              "value": "={{ $json.intent }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        420,
+        -180
+      ],
+      "id": "f7b2611f-988b-4df1-8472-6d038f9ab24a",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://amenities-anatomy-struck-vat.trycloudflare.com/memory/save-goalorhabbit",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "type",
+              "value": "={{ $json.type }}"
+            },
+            {
+              "name": "intent",
+              "value": "={{ $json.intent }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        80
+      ],
+      "id": "75d8d926-7b6e-46c3-9b69-f093cb401fa3",
+      "name": "HTTP Request4"
     }
   ],
   "connections": {
@@ -191,6 +304,35 @@
         [
           {
             "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request4",
             "type": "main",
             "index": 0
           }
