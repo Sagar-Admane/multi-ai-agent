@@ -30,6 +30,7 @@ relationship-query
 save-goalorhabbit
 update-goalProgress
 habit-checkin
+task-intent
 
 RULES (strict priority order):
 
@@ -50,11 +51,6 @@ about the USER ONLY, classify as: save-memory.
 (family member, friend, colleague, etc.),
 classify as: save-relationship.
 
-   Examples:
-   - “My mother’s name is Madhuri.”
-   - “My brother likes cricket.”
-   - “My friend Rahul lives in Mumbai.”
-
 5. Questions about ANOTHER person → relationship-query.
 
 6. New goal or habit → save-goalorhabbit.
@@ -66,6 +62,16 @@ classify as: save-relationship.
 9. Explicit requests to forget/delete → delete-memory.
 
 10. Any code, logs, or technical content → save-memory.
+
+11. If the text instructs to perform a task such as:
+- setting a meeting or reminder,
+- scheduling something,
+- writing or sending an email,
+- adding to calendar,
+- booking something,
+- or any explicit task/action command
+
+classify as: task-intent.
 
 Fallback rules:
 - Time-marker + question about the user’s past → query-episodic.
