@@ -2,6 +2,12 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { embed, generateText } from "ai";
 import OpenAI from "openai";
 import cleanJSON from "./utils.js";
+import env from "dotenv"
+
+env.config({
+    path : "./.env"
+});
+
 
 const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
