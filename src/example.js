@@ -10,25 +10,40 @@ const openai = new OpenAI({
 })
 
 async function generateRelation(text){
-    try {
-        const response = await openai.chat.completions.create({
-            model : "tngtech/deepseek-r1t2-chimera:free",
-            messages : [
-                {
-                    role : "user",
-                    content : `In the below text based on who i am referring to determine the name of the referred person : ${text}
-                    Rules - 
-                    Do not add anything extra
-                    Do not add any extra symbol
-                    Just share the name in the response`
-                }
-            ]
-        })
 
-        console.log(response.choices[0].message.content);
-    } catch (error) {
-        console.log(error)
-    }
+    var date = new Date().toISOString();
+    date = date.slice(0, 10);
+
+    const response = await openai.chat.completions.create({
+        model : "meta-llama/llama-3.1-8b-instruct",
+        messages : [
+            {
+                role : "developer",
+                content : `In the following text what is the task I am asked to do, what are the key things that I can take out from the following text : ${text}
+                
+                if asked for date respond in the date structure DD/MM/YYYY on the basis of current date : ${date}
+                
+                Response in the form of json and key value for example : 
+                {
+                "task": "Set a reminder for a meeting",
+                "date" : "12/01/2025",
+                "time" : "12:00pm"
+                }
+                remember there can be other keys too, this was just for example, add as many keys as you want like name, location, people, time range etc.
+
+                STRICT RULES:
+                Do not provide any extra information
+                Do not give any new punctuation marks or slash or new line or any kind of symbol
+                Directly provide the response in the given format as above
+                Do not add anything extra
+                `
+
+            }
+        ]
+    })
+
+    console.log(JSON.parse(response.choices[0].message.content));
+    console.log(date.slice(0, 10));
 }
 
 function cleanJSON(str) {
@@ -42,4 +57,4 @@ function cleanJSON(str) {
 
 // generateEmbeddings("I have completed learning half of my syllabus")
 
-generateRelation("My mother's name is Madhuri")
+generateRelation("Set a reminder for tomorrow's meeting with AMC motors on 12:00 pm")

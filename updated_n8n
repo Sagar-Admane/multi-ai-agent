@@ -10,15 +10,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -860,
-        140
+        -1280,
+        320
       ],
-      "id": "a1e7a5c2-eb85-4f21-ae6c-c052a7212592",
+      "id": "103a18f9-7b9a-4b02-a7c2-4a7b6be2da6d",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
       "credentials": {
         "telegramApi": {
-          "id": "LuwauFPxtWfmZCMy",
+          "id": "l2FO21InME7nOm3f",
           "name": "Telegram account"
         }
       }
@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://went-arena-principle-paid.trycloudflare.com/getIntent",
+        "url": "https://scripts-interstate-agree-revelation.trycloudflare.com/getIntent",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -41,16 +41,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -640,
-        140
+        -1060,
+        320
       ],
-      "id": "ca7454a8-f37d-4036-8c65-3bf4ebf66b18",
+      "id": "696d49c2-318c-481d-8283-56f6c64080ba",
       "name": "HTTP Request"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://tricks-scales-lanes-championship.trycloudflare.com/memory/{{ $json.intent }}",
+        "url": "=https://jan-insight-cumulative-fighter.trycloudflare.com/memory/{{ $json.intent }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -69,10 +69,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        20,
-        320
+        -400,
+        500
       ],
-      "id": "9266b512-01ac-47ec-922e-cb2ff3b5806d",
+      "id": "96117a92-8a4d-4866-9424-7f46058e4adb",
       "name": "HTTP Request1"
     },
     {
@@ -84,15 +84,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        300,
-        320
+        -120,
+        500
       ],
-      "id": "ff46e9a4-0ff4-4281-8c6a-06bb027269af",
+      "id": "be90b273-71b7-4ec2-b0ca-f8aff286c8f5",
       "name": "Telegram",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
       "credentials": {
         "telegramApi": {
-          "id": "LuwauFPxtWfmZCMy",
+          "id": "l2FO21InME7nOm3f",
           "name": "Telegram account"
         }
       }
@@ -116,48 +116,30 @@
                 "operation": "equals",
                 "name": "filter.operator.equals"
               }
+            },
+            {
+              "id": "a6bee88d-187e-438e-8b44-029ed1f4003f",
+              "leftValue": "={{ $json.intent }}",
+              "rightValue": "task-intent",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
             }
           ],
-          "combinator": "and"
+          "combinator": "or"
         },
         "options": {}
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -420,
-        140
+        -840,
+        320
       ],
-      "id": "d7a6edc5-4615-4846-bacd-435f08269858",
+      "id": "a40b8e02-5bde-4c51-8380-d7bc7118d29f",
       "name": "If"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://amenities-anatomy-struck-vat.trycloudflare.com/memory/goalOrHabbit",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "=intent",
-              "value": "={{ $json.intent }}"
-            },
-            {
-              "name": "text",
-              "value": "={{ $json.text }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        0,
-        0
-      ],
-      "id": "71d2edf4-e1da-42a9-bf56-e0b13f4f395b",
-      "name": "HTTP Request2"
     },
     {
       "parameters": {
@@ -187,10 +169,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        220,
-        0
+        -200,
+        180
       ],
-      "id": "1ffecda0-bbe5-4364-93d8-c8c5df334088",
+      "id": "6760ae16-bdee-4dca-be04-22e7e9307ca5",
       "name": "If1"
     },
     {
@@ -219,10 +201,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        420,
-        -180
+        0,
+        0
       ],
-      "id": "f7b2611f-988b-4df1-8472-6d038f9ab24a",
+      "id": "534170d5-8b0e-4b32-9e33-cd47fe890047",
       "name": "HTTP Request3"
     },
     {
@@ -251,11 +233,73 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        480,
-        80
+        60,
+        260
       ],
-      "id": "75d8d926-7b6e-46c3-9b69-f093cb401fa3",
+      "id": "4a4f2d56-aac2-49d2-b454-55313251958c",
       "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4c983a6c-4f08-4056-a2af-04ffe39033c4",
+              "leftValue": "={{ $json.intent }}",
+              "rightValue": "task-intent",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -660,
+        -20
+      ],
+      "id": "6f5afd9c-f51d-40e8-aef9-2a0c3f6d31a2",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://jan-insight-cumulative-fighter.trycloudflare.com/getTask",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.text }}"
+            },
+            {
+              "name": "intent",
+              "value": "={{ $json.intent }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -440,
+        -200
+      ],
+      "id": "87dcf563-a8e0-40dc-b2fc-f56439a7d316",
+      "name": "HTTP Request5"
     }
   ],
   "connections": {
@@ -296,7 +340,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request2",
+            "node": "If2",
             "type": "main",
             "index": 0
           }
@@ -304,17 +348,6 @@
         [
           {
             "node": "HTTP Request1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HTTP Request2": {
-      "main": [
-        [
-          {
-            "node": "If1",
             "type": "main",
             "index": 0
           }
@@ -337,6 +370,18 @@
             "index": 0
           }
         ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
       ]
     }
   },
