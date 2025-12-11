@@ -3,6 +3,7 @@ import { embed, generateText } from "ai";
 import OpenAI from "openai";
 import cleanJSON from "./utils.js";
 import env from "dotenv"
+import { error } from "console";
 
 env.config({
     path : "./.env"
@@ -304,5 +305,55 @@ User update: "${text}"
         return parseInt(cleanJSON(response.choices[0].message.content));
     } catch (error) {
         return 0
+    }
+}
+
+export async function getTasks(text : string){
+    try {
+        var date = new Date().toISOString();
+        date = date.slice(0, 10);
+
+    const response = await openai.chat.completions.create({
+        model : "meta-llama/llama-3.1-8b-instruct",
+        messages : [
+            {
+                role : "developer",
+                content : `In the following text what is the task I am asked to do, what are the key things that I can take out from the following text : ${text}
+                
+                if asked for date respond in the date structure DD/MM/YYYY on the basis of current date : ${date}
+                
+                Response in the form of json and key value for example : 
+                {
+                "task": "Set a reminder for a meeting",
+                "date" : "12/01/2025",
+                "time" : "12:00pm"
+                }
+                remember there can be other keys too, this was just for example, add as many keys as you want like name, location, people, time range etc.
+
+                STRICT RULES:
+                Do not provide any extra information
+                Do not give any new punctuation marks or slash or new line or any kind of symbol
+                Directly provide the response in the given format as above
+                Do not add anything extra
+                Just provide me the json response and nothing extra information
+                `
+
+            }
+        ]
+    })
+
+    const content = response.choices[0].message.content;
+    if(!content){
+        throw new Error("Cannot derive content from the text")
+    }
+    console.log(content);
+
+    const result = JSON.parse(content);
+    console.log(date.slice(0, 10));
+
+    return result
+    } catch (error) {
+        console.log(error);
+        return error
     }
 }
