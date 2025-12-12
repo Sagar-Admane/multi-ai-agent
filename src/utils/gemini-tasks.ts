@@ -335,7 +335,7 @@ export async function getTasks(text : string){
                 Do not give any new punctuation marks or slash or new line or any kind of symbol
                 Directly provide the response in the given format as above
                 Do not add anything extra
-                Just provide me the json response and nothing extra information
+                Just provide me the json response and nothing extra information not anything extra
                 `
 
             }

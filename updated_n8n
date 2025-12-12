@@ -10,15 +10,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1280,
-        320
+        -680,
+        500
       ],
-      "id": "103a18f9-7b9a-4b02-a7c2-4a7b6be2da6d",
+      "id": "47b6f34f-0548-4b19-bc35-6f7dbce6ad17",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
       "credentials": {
         "telegramApi": {
-          "id": "l2FO21InME7nOm3f",
+          "id": "IuQThNH7IB6HraS4",
           "name": "Telegram account"
         }
       }
@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://scripts-interstate-agree-revelation.trycloudflare.com/getIntent",
+        "url": "https://want-eos-excel-incurred.trycloudflare.com/getIntent",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -41,16 +41,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1060,
-        320
+        -460,
+        500
       ],
-      "id": "696d49c2-318c-481d-8283-56f6c64080ba",
+      "id": "cf6676e5-7364-4069-97f2-900a9fff6a3e",
       "name": "HTTP Request"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://jan-insight-cumulative-fighter.trycloudflare.com/memory/{{ $json.intent }}",
+        "url": "=https://productivity-correctly-guided-amenities.trycloudflare.com/memory/{{ $json.intent }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -69,10 +69,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -400,
-        500
+        200,
+        680
       ],
-      "id": "96117a92-8a4d-4866-9424-7f46058e4adb",
+      "id": "c8c85016-6a89-47af-ad74-f8f525e169cd",
       "name": "HTTP Request1"
     },
     {
@@ -84,15 +84,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -120,
-        500
+        480,
+        680
       ],
-      "id": "be90b273-71b7-4ec2-b0ca-f8aff286c8f5",
+      "id": "fcd5e964-4f29-4b3b-bbd1-a753bc50a90a",
       "name": "Telegram",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
       "credentials": {
         "telegramApi": {
-          "id": "l2FO21InME7nOm3f",
+          "id": "IuQThNH7IB6HraS4",
           "name": "Telegram account"
         }
       }
@@ -135,10 +135,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -840,
-        320
+        -240,
+        500
       ],
-      "id": "a40b8e02-5bde-4c51-8380-d7bc7118d29f",
+      "id": "54020fef-46b3-42c2-a14c-f6c02ddfb21d",
       "name": "If"
     },
     {
@@ -169,10 +169,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -200,
-        180
+        400,
+        360
       ],
-      "id": "6760ae16-bdee-4dca-be04-22e7e9307ca5",
+      "id": "ea6f871f-e19d-4786-9857-5262d0fbd19c",
       "name": "If1"
     },
     {
@@ -201,10 +201,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        0,
-        0
+        600,
+        180
       ],
-      "id": "534170d5-8b0e-4b32-9e33-cd47fe890047",
+      "id": "f5747145-ad56-4fb7-9a2d-f0f957ecf1d8",
       "name": "HTTP Request3"
     },
     {
@@ -233,10 +233,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        60,
-        260
+        660,
+        440
       ],
-      "id": "4a4f2d56-aac2-49d2-b454-55313251958c",
+      "id": "a61eda00-d962-48fd-a6f7-0a43aac8649a",
       "name": "HTTP Request4"
     },
     {
@@ -267,16 +267,16 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -660,
-        -20
+        -60,
+        160
       ],
-      "id": "6f5afd9c-f51d-40e8-aef9-2a0c3f6d31a2",
+      "id": "4f86bfef-6937-4f64-9ae7-80d65c6a2db9",
       "name": "If2"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://jan-insight-cumulative-fighter.trycloudflare.com/getTask",
+        "url": "https://productivity-correctly-guided-amenities.trycloudflare.com/getTask",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -295,10 +295,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -440,
-        -200
+        160,
+        -20
       ],
-      "id": "87dcf563-a8e0-40dc-b2fc-f56439a7d316",
+      "id": "93de89db-a6f5-431d-af22-f38e646a78e9",
       "name": "HTTP Request5"
     }
   ],
@@ -381,7 +381,13 @@
             "index": 0
           }
         ],
-        []
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
