@@ -313,53 +313,66 @@ export async function getTasks(text : string){
         var date = new Date().toISOString();
         date = date.slice(0, 10);
 
+        console.log(date);
+
     const response = await openai.chat.completions.create({
         model : "meta-llama/llama-3.1-8b-instruct",
         messages : [
             {
                 role : "developer",
-                // content : `In the following text what is the task I am asked to do, what are the key things that I can take out from the following text : ${text}
+                content : `In the following text what is the task I am asked to do, what are the key things that I can take out from the following text : ${text}
                 
-                // if asked for date respond in the date structure DD/MM/YYYY on the basis of current date : ${date}
+                if asked for date, respond in the date structure DD/MM/YYYY on the basis of current date : ${date}
+                Date Interpretation Rules:
+- "today" = Current date
+- "tomorrow" = Current date + 1 day
+- "next week" = current date + 7 days
+- "next month" = last day of next month
+- "end of month" = last day of current month
+- "in X days" = add X days
+- If ambiguous → return "none"
+                {
+                "task": "Set a reminder for a meeting",
+                "date" : "12/01/2025",
+                "time" : "12:00pm"
+                }
+                create a json response and add all the important keys from the text, 
+                Remeber it there can be other keys like time person location meeting etc.
+                Do get those text and send me
+                remember there can be other keys too, this was just for example, add as many keys as you want like name, location, people, time range etc.
+
+                Also on the basis of text classify reminderFrequency as : Daily, Weekly, Monthy, Yearly
+
+                STRICT RULES:
+                Do not provide any extra information
+                Do not give any new punctuation marks or slash or new line or any kind of symbol
+                Directly provide the response in the given format as above
+                Do not add anything extra
+                Just provide me the json response and nothing extra information not anything extra
                 
-                // Response in the form of json and key value for example : 
-                // {
-                // "task": "Set a reminder for a meeting",
-                // "date" : "12/01/2025",
-                // "time" : "12:00pm"
-                // }
-                // create a json response and add all the important keys from the text, 
-                // Remeber it there can be other keys like time person location meeting etc.
-                // Do get those text and send me
-                // remember there can be other keys too, this was just for example, add as many keys as you want like name, location, people, time range etc.
+                
 
-                // STRICT RULES:
-                // Do not provide any extra information
-                // Do not give any new punctuation marks or slash or new line or any kind of symbol
-                // Directly provide the response in the given format as above
-                // Do not add anything extra
-                // Just provide me the json response and nothing extra information not anything extra
-                // `
-                content : `Return ONLY valid JSON.
-Use double quotes for all keys and values.
+ Use EXACTLY this schema:
+ {
+   "task": string,
+   "date": string (DD/MM/YYYY or empty),
+   "startTime": string (HH:mm in 24h or empty),
+   "endTime": string (HH:mm in 24h or empty),
+   "timeRange": string,
+   "person": string,
+   "location": string,
+   "people": string,
+   "agenda": string,
+   "reminder_frequency" : string
+ }
 
-Use EXACTLY this schema:
-{
-  "task": string,
-  "date": string (DD/MM/YYYY or empty),
-  "startTime": string (HH:mm in 24h or empty),
-  "endTime": string (HH:mm in 24h or empty),
-  "timeRange": string,
-  "location": string,
-  "person": string,
-  "people": string,
-  "agenda": string
-}
-If a value is unknown, return empty string.
-Text is : ${text}
-Date is : ${date}
-if there's date in text send it to date key, if there's time range set it to startTime and endTime respectively
-`
+ STRICT RULES:  
+                Use the exact schema don't miss anything
+                Do not provide any extra information
+                Do not give any new punctuation marks or slash or new line or any kind of symbol
+                Directly provide the response in the given format as above
+                Do not add anything extra
+                Just provide me the json response and nothing extra information not anything extra`
 
             }
         ]
@@ -372,7 +385,11 @@ if there's date in text send it to date key, if there's time range set it to sta
     console.log(content);
 
     const result = JSON.parse(content);
-    console.log(date.slice(0, 10));
+    const [h,m] = result.startTime.split(":");
+    console.log(h,m)
+    const date1 = result.date.split("/").reverse().join("-");
+    const t1 = new Date(date1).setHours(parseInt(h), parseInt(m), 0, 0);
+    result.date = t1;
 
     return result
     } catch (error) {
