@@ -10,15 +10,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -680,
-        500
+        -840,
+        520
       ],
-      "id": "47b6f34f-0548-4b19-bc35-6f7dbce6ad17",
+      "id": "a077ddd6-22ed-4486-afc3-30e70b14d105",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
       "credentials": {
         "telegramApi": {
-          "id": "IuQThNH7IB6HraS4",
+          "id": "LmsBELT94CucvNA2",
           "name": "Telegram account"
         }
       }
@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://want-eos-excel-incurred.trycloudflare.com/getIntent",
+        "url": "https://dimensions-disable-built-responsibility.trycloudflare.com/getIntent",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -41,16 +41,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -460,
-        500
+        -620,
+        520
       ],
-      "id": "cf6676e5-7364-4069-97f2-900a9fff6a3e",
+      "id": "e2ca6bb1-4e4e-4379-bb6f-6241985e66df",
       "name": "HTTP Request"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://productivity-correctly-guided-amenities.trycloudflare.com/memory/{{ $json.intent }}",
+        "url": "=https://ken-forbes-valley-farm.trycloudflare.com/memory/{{ $json.intent }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -69,10 +69,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        200,
-        680
+        40,
+        700
       ],
-      "id": "c8c85016-6a89-47af-ad74-f8f525e169cd",
+      "id": "8d568f07-4b35-4697-af96-cdea2ad7904e",
       "name": "HTTP Request1"
     },
     {
@@ -84,15 +84,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        480,
-        680
+        320,
+        700
       ],
-      "id": "fcd5e964-4f29-4b3b-bbd1-a753bc50a90a",
+      "id": "bf4a0239-4815-4d9d-872b-7c29c5cf2252",
       "name": "Telegram",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
       "credentials": {
         "telegramApi": {
-          "id": "IuQThNH7IB6HraS4",
+          "id": "LmsBELT94CucvNA2",
           "name": "Telegram account"
         }
       }
@@ -135,10 +135,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -240,
-        500
+        -400,
+        520
       ],
-      "id": "54020fef-46b3-42c2-a14c-f6c02ddfb21d",
+      "id": "36be145c-8761-4bf8-8c4d-7b68d85bd2f4",
       "name": "If"
     },
     {
@@ -169,16 +169,16 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        400,
-        360
+        240,
+        380
       ],
-      "id": "ea6f871f-e19d-4786-9857-5262d0fbd19c",
+      "id": "d8210f4c-9f0b-4f8f-93e2-5ce2a0edd70e",
       "name": "If1"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://amenities-anatomy-struck-vat.trycloudflare.com/memory/save-goalorhabbit",
+        "url": "https://ken-forbes-valley-farm.trycloudflare.com/memory/save-goalorhabbit",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -201,16 +201,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        600,
-        180
+        440,
+        200
       ],
-      "id": "f5747145-ad56-4fb7-9a2d-f0f957ecf1d8",
+      "id": "17b1165f-87b3-43fd-9d90-b1580d5513bd",
       "name": "HTTP Request3"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://amenities-anatomy-struck-vat.trycloudflare.com/memory/save-goalorhabbit",
+        "url": "https://ken-forbes-valley-farm.trycloudflare.com/memory/save-goalorhabbit",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -233,10 +233,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        660,
-        440
+        500,
+        460
       ],
-      "id": "a61eda00-d962-48fd-a6f7-0a43aac8649a",
+      "id": "9681db45-50e8-4a10-8362-fa40f4ab8185",
       "name": "HTTP Request4"
     },
     {
@@ -267,16 +267,16 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -60,
-        160
+        -220,
+        180
       ],
-      "id": "4f86bfef-6937-4f64-9ae7-80d65c6a2db9",
+      "id": "b161dae8-28ce-4aa4-b373-c900cf876d14",
       "name": "If2"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://productivity-correctly-guided-amenities.trycloudflare.com/getTask",
+        "url": "https://ken-forbes-valley-farm.trycloudflare.com/getTask",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -295,11 +295,51 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        160,
-        -20
+        0,
+        0
       ],
-      "id": "93de89db-a6f5-431d-af22-f38e646a78e9",
+      "id": "2cf2e621-e165-4ec3-b4b9-9ffea2df0195",
       "name": "HTTP Request5"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "sagaradmane6@gmail.com",
+          "mode": "list",
+          "cachedResultName": "sagaradmane6@gmail.com"
+        },
+        "start": "={{\n  new Date(\n    $json.result.date.split('/').reverse().join('-') + ' ' + $json.result.startTime\n  ).toISOString()\n}}",
+        "end": "={{ $json.result.date.split('/').reverse().join('-') }}",
+        "useDefaultReminders": false,
+        "additionalFields": {
+          "attendees": [],
+          "description": "={{ $json.result.task }}",
+          "summary": "={{ $json.result.agenda }}"
+        },
+        "remindersUi": {
+          "remindersValues": [
+            {
+              "method": "popup",
+              "minutes": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        300,
+        0
+      ],
+      "id": "c97e5a3e-d030-47b5-84b6-5735d46b081d",
+      "name": "Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "X7POe2urVcBdCbNa",
+          "name": "Google Calendar account"
+        }
+      }
     }
   ],
   "connections": {
@@ -384,6 +424,17 @@
         [
           {
             "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar",
             "type": "main",
             "index": 0
           }
