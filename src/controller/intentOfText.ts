@@ -73,12 +73,17 @@ classify as: save-relationship.
 
 classify as: task-intent.
 
+12.If intent : save-goalorhabbit
+- classify text as habit or goal
+        type : habit
+        type : goal
+
 Fallback rules:
 - Time-marker + question about the user’s past → query-episodic.
 - “I/my/me” + question + no time marker → query-memory.
 - Otherwise choose the closest valid intent.
 
-Output ONLY the intent name. No punctuation. No explanations.
+Output ONLY the intent name and if applicable type. No punctuation. No explanations.
 
 Now classify this:
 "${text}"`
@@ -94,9 +99,22 @@ Now classify this:
          ]
         })
 
-        console.log(cleanJSON(response.choices[0].message.content));
+        var reached = (cleanJSON(response.choices[0].message.content));
+            reached = reached.split(" ");
+            console.log(reached);
+            var type;
+            if(reached[2]){
+                type = reached[2];
+            } else {
+                type = reached[1] ? reached[1].split(":")[1] : "";
+            }
+            var intent = reached[0];
+            console.log(type);
+            console.log(intent);
+            var intent = reached[0];
         return res.json({
-            intent : cleanJSON(response.choices[0].message.content),
+            intent : intent,
+            type : type,
             text : text
         })
     } catch (error) {
@@ -104,3 +122,4 @@ Now classify this:
         return res.json({error : `${error}`})
     }
 }
+
