@@ -318,25 +318,48 @@ export async function getTasks(text : string){
         messages : [
             {
                 role : "developer",
-                content : `In the following text what is the task I am asked to do, what are the key things that I can take out from the following text : ${text}
+                // content : `In the following text what is the task I am asked to do, what are the key things that I can take out from the following text : ${text}
                 
-                if asked for date respond in the date structure DD/MM/YYYY on the basis of current date : ${date}
+                // if asked for date respond in the date structure DD/MM/YYYY on the basis of current date : ${date}
                 
-                Response in the form of json and key value for example : 
-                {
-                "task": "Set a reminder for a meeting",
-                "date" : "12/01/2025",
-                "time" : "12:00pm"
-                }
-                remember there can be other keys too, this was just for example, add as many keys as you want like name, location, people, time range etc.
+                // Response in the form of json and key value for example : 
+                // {
+                // "task": "Set a reminder for a meeting",
+                // "date" : "12/01/2025",
+                // "time" : "12:00pm"
+                // }
+                // create a json response and add all the important keys from the text, 
+                // Remeber it there can be other keys like time person location meeting etc.
+                // Do get those text and send me
+                // remember there can be other keys too, this was just for example, add as many keys as you want like name, location, people, time range etc.
 
-                STRICT RULES:
-                Do not provide any extra information
-                Do not give any new punctuation marks or slash or new line or any kind of symbol
-                Directly provide the response in the given format as above
-                Do not add anything extra
-                Just provide me the json response and nothing extra information not anything extra
-                `
+                // STRICT RULES:
+                // Do not provide any extra information
+                // Do not give any new punctuation marks or slash or new line or any kind of symbol
+                // Directly provide the response in the given format as above
+                // Do not add anything extra
+                // Just provide me the json response and nothing extra information not anything extra
+                // `
+                content : `Return ONLY valid JSON.
+Use double quotes for all keys and values.
+
+Use EXACTLY this schema:
+{
+  "task": string,
+  "date": string (DD/MM/YYYY or empty),
+  "startTime": string (HH:mm in 24h or empty),
+  "endTime": string (HH:mm in 24h or empty),
+  "timeRange": string,
+  "location": string,
+  "person": string,
+  "people": string,
+  "agenda": string
+}
+If a value is unknown, return empty string.
+Text is : ${text}
+Date is : ${date}
+if there's date in text send it to date key, if there's time range set it to startTime and endTime respectively
+`
 
             }
         ]
