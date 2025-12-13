@@ -49,24 +49,23 @@ server.registerTool("save-memory", {
             }
         }
         else {
-            if (importanceScore > 1) {
-                const memory = new Memory({
-                    text: text,
-                    embeddings: embedding,
-                    category: category,
-                    tags: tags
-                });
-                await memory.save();
-            }
+            const memory = new Memory({
+                text: text,
+                embeddings: embedding,
+                category: category,
+                tags: tags
+            });
+            await memory.save();
+            var ai_response = `await generateAIRespone(text)`;
         }
-        const ai_response = await generateAIRespone(text);
+        ai_response = await generateAIRespone(text);
         return {
             content: [{ type: "text", text: `${ai_response} ` }]
         };
     }
     catch (error) {
         return {
-            content: [{ type: "text", text: "Error while saving the memory" }]
+            content: [{ type: "text", text: `${error}` }]
         };
     }
 });
@@ -86,8 +85,9 @@ server.registerTool("query-memory", {
             score: cosineSimilarity(queryEmbedding, m.embeddings)
         }));
         scored.sort((a, b) => b.score - a.score);
+        const response = scored.slice(0, topK)[0].memory.text;
         return {
-            content: [{ type: "text", text: `${scored.slice(0, topK)}` }]
+            content: [{ type: "text", text: `${response}` }]
         };
     }
     catch (error) {
@@ -112,7 +112,7 @@ server.registerTool("delete-memory", {
         }));
         scored.sort((a, b) => b.score - a.score);
         const matches = scored.slice(0, 3);
-        const toDelete = matches.filter(m => m.score >= 0.7);
+        const toDelete = matches.filter(m => m.score >= 0.6);
         const best = toDelete[0].memory;
         await Memory.findByIdAndDelete(best._id);
         return {
@@ -121,7 +121,7 @@ server.registerTool("delete-memory", {
     }
     catch (error) {
         return {
-            content: [{ type: "text", text: "Error while deleting from memory" }]
+            content: [{ type: "text", text: `${error}` }]
         };
     }
 });
@@ -158,6 +158,7 @@ server.registerTool("query-episodic", {
     }
 }, async ({ text }) => {
     try {
+        const topK = 3;
         const embedding = await generateEmbeddings(text);
         const memories = await EpisodicMemory.find();
         const scored = memories.map((m) => ({
@@ -165,8 +166,9 @@ server.registerTool("query-episodic", {
             score: cosineSimilarity(embedding, m.embedding)
         }));
         scored.sort((a, b) => b.score - a.score);
+        const response = scored.slice(0, topK)[0].memory.content;
         return {
-            content: [{ type: "text", text: `${scored.slice(0, 3)}` }]
+            content: [{ type: "text", text: `${response}` }]
         };
     }
     catch (error) {
@@ -203,7 +205,7 @@ server.registerTool("save-relationship", {
     }
     catch (error) {
         return {
-            content: [{ type: "text", text: "Error saving relationship" }]
+            content: [{ type: "text", text: `${error}` }]
         };
     }
 });

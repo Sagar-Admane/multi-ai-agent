@@ -1,75 +1,100 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { generateText } from "ai";
 import env from "dotenv";
+import OpenAI from "openai";
+import cleanJSON from "../utils/utils.js";
 env.config();
 const google = createGoogleGenerativeAI({
     apiKey: process.env.GEMINI_API_KEY
 });
+const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.openrouter,
+});
 export async function intentOfText(req, res) {
     try {
         const text = req.body.text;
-        const prompt = `You are an intent classifier for a personal AI memory system.
+        const prompt = `You are an intent classifier.
 
-Your job: Read the user text and return ONLY one intent from the list below.
-Do NOT return explanations or extra words. Return only the intent name exactly.
+Return EXACTLY one of the following intents and nothing else:
+save-memory
+query-memory
+delete-memory
+episodic-memory
+query-episodic
+save-relationship
+relationship-query
+save-goalorhabbit
+update-goalProgress
+habit-checkin
+task-intent
 
-Here are the available intents and what they mean:
+RULES (strict priority order):
 
-1. save-memory  
-   - When the user shares information they want remembered.
-   - Example: “I moved to a new apartment”, “My favorite food is dosa”.
+1. If the text describes a personal event that happened at a specific time
+(today, yesterday, last week, this morning, last night, etc.),
+classify as: episodic-memory.
 
-2. query-memory  
-   - When the user asks for something they saved earlier.
-   - Example: “What did I say about my job?”, “Do you remember my preferences?”
+2. If the text ASKS about the user's own past events at a specific time,
+classify as: query-episodic.
 
-3. delete-memory  
-   - When user wants to delete something they stored.
-   - Example: “Forget my old phone number”, “Delete that memory about gym”.
+3. If the text is asking about the user's OWN general stored info (not time-specific),
+classify as: query-memory.
 
-4. episodic-memory  
-   - When user describes a personal experience, event, or story.
-   - Example: “Today I went to the mall with friends”.
+4. If the text is a personal fact, identity, biography, or long-term information
+about the USER ONLY, classify as: save-memory.
 
-5. query-episodic  
-   - When user asks about things that happened or events they shared earlier.
-   - Example: “What did I do last week?”, “Do you remember what I said yesterday?”
+4.5. If the text provides information ABOUT ANOTHER PERSON
+(family member, friend, colleague, etc.),
+classify as: save-relationship.
 
-6. save-relationship  
-   - When the text mentions a person and some info about them.
-   - Example: “My friend Rahul loves cricket”.
+5. Questions about ANOTHER person → relationship-query.
 
-7. relationship-query  
-   - When user asks something about a person stored earlier.
-   - Example: “What do you know about Rahul?”, “Tell me facts about John”.
+6. New goal or habit → save-goalorhabbit.
 
-8. save-goalorhabbit  
-   - When user states a new goal or habit.
-   - Example: “I want to learn DSA in 30 days”, “I will drink water daily”.
+7. Progress update → update-goalProgress.
 
-9. update-goalProgress  
-   - When user reports progress about an existing goal.
-   - Example: “I finished 20% of my DSA prep”, “Today I studied arrays”.
+8. Daily habit completion → habit-checkin.
 
-10. habit-checkin  
-   - When user marks a daily habit check-in.
-   - Example: “I completed today’s meditation session.”
+9. Explicit requests to forget/delete → delete-memory.
 
----
+10. Any code, logs, or technical content → save-memory.
 
-### Output format:
-Return ONLY one word: the intent name.
+11. If the text instructs to perform a task such as:
+- setting a meeting or reminder,
+- scheduling something,
+- writing or sending an email,
+- adding to calendar,
+- booking something,
+- or any explicit task/action command
 
-### Now classify the following user text:
-"${text}"
-`;
-        const response = await generateText({
-            model: google("gemini-2.0-flash-lite"),
-            prompt: `${prompt}`
+classify as: task-intent.
+
+12.If intent : save-goalorhabbit
+- classify text as habit or goal
+        type : habit
+        type : goal
+
+Fallback rules:
+- Time-marker + question about the user’s past → query-episodic.
+- “I/my/me” + question + no time marker → query-memory.
+- Otherwise choose the closest valid intent.
+
+Output ONLY the intent name. No punctuation. No explanations.
+
+Now classify this:
+"${text}"`;
+        const response = await openai.chat.completions.create({
+            model: "google/gemma-2-9b-it",
+            messages: [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ]
         });
-        console.log(response.text);
+        console.log(cleanJSON(response.choices[0].message.content));
         return res.json({
-            intent: response.text.trim(),
+            intent: cleanJSON(response.choices[0].message.content),
             text: text
         });
     }

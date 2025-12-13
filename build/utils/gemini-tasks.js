@@ -1,55 +1,83 @@
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { embed, generateText } from "ai";
-const google = createGoogleGenerativeAI({
-    apiKey: process.env.GEMINI_API_KEY
+import OpenAI from "openai";
+import cleanJSON from "./utils.js";
+import env from "dotenv";
+env.config({
+    path: "./.env"
+});
+const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.openrouter,
 });
 export async function generateTasks(text) {
-    const response = await generateText({
-        model: google("gemini-2.0-flash-lite"),
-        prompt: `Extract 3-5 concise keywords from this text, as an array of strings : ${text} `
+    const response1 = await openai.chat.completions.create({
+        model: "google/gemma-2-9b-it",
+        messages: [
+            {
+                "role": "user",
+                "content": `Extract 3-5 concise keywords from this text, as an array of strings : ${text} `
+            }
+        ]
     });
-    var tags = JSON.parse(response.text.replace(/```/g, "").trim().replace("json", ``).trim());
-    const response1 = await generateText({
-        model: google("gemini-2.0-flash-lite"),
-        prompt: `Claasify the following text based on the categories I am providing. If none of them matched give me the category. Do remeber to provide the response in single word : 
+    const response2 = await openai.chat.completions.create({
+        model: "google/gemma-2-9b-it",
+        messages: [{
+                role: "user",
+                content: `Claasify the following text based on the categories I am providing. If none of them matched give me the category. Do remeber to provide the response in single word : 
         text : ${text},
         categories : profile, preference, goal, habit, task, knowledge, health, finance, schedule, episodic, relationship, other`
+            }]
     });
+    const rawJson = response1.choices[0].message.content;
+    const cleaned = cleanJSON(rawJson);
+    console.log(cleaned);
+    const rawJson1 = response2.choices[0].message.content;
+    const cleaned1 = cleanJSON(rawJson1);
     return {
-        tags: tags,
-        category: response1.text
+        tags: cleaned,
+        category: cleaned1
     };
 }
 export async function generateEmbeddings(text) {
     try {
-        const { embedding } = await embed({
-            model: google.textEmbeddingModel("text-embedding-004"),
-            value: text
+        const response = await openai.embeddings.create({
+            model: "text-embedding-3-small",
+            input: text
         });
-        return embedding;
+        console.log(response.data[0].embedding);
+        return response.data[0].embedding;
     }
     catch (error) {
-        console.log("Error while generating the embedding");
         return [];
     }
 }
 export async function generateAIRespone(text) {
     try {
-        const response = await generateText({
-            model: google("gemini-2.0-flash-lite"),
-            prompt: `Give me a simple no further moving conversational response for the following text : ${text}`
+        const response = await openai.chat.completions.create({
+            model: "google/gemma-2-9b-it",
+            messages: [
+                {
+                    role: "user",
+                    content: `Give me a simple no further moving conversational response for the following text : ${text}`
+                }
+            ]
         });
-        return response.text.trim();
+        const res = response.choices[0].message.content;
+        console.log(cleanJSON(res));
+        return res;
     }
     catch (error) {
+        console.log(error);
         return error;
     }
 }
 export async function generateImportanceScore(text) {
     try {
-        const response = await generateText({
-            model: google("gemini-2.0-flash-lite"),
-            prompt: `
+        const response = await openai.chat.completions.create({
+            model: "google/gemma-2-9b-it",
+            messages: [
+                {
+                    role: "user",
+                    content: `
                 Rate the importance of this memory on a scale of 1-5:
                 1 = unimportant
                 5 = critical / permanent
@@ -57,46 +85,84 @@ export async function generateImportanceScore(text) {
                 Memory: "${text}"
 
                 Remember to return only the number (1-5).`
+                }
+            ]
         });
-        return parseInt(response.text.trim());
+        console.log(cleanJSON(response.choices[0].message.content));
+        const result = cleanJSON(response.choices[0].message.content);
+        return parseInt(result);
     }
     catch (error) {
         return 0;
     }
 }
 export async function genereateRelationship(text) {
-    const personId = await generateText({
-        model: google("gemini-2.0-flash-lite"),
-        prompt: `Determine the relationship of the main subject in the text with the user (Sagar).
-                    If the main subject refers to ‘I’, ‘me’, or ‘Sagar’, or 'my' return user.
-                    Otherwise, return friend.
-                    Output only one word: user or friend.
-                    Text: ${text}`
+    const personId = await openai.chat.completions.create({
+        model: "google/gemma-2-9b-it",
+        messages: [
+            {
+                role: "user",
+                content: `Extract the relationship of the main subject in the text with the user (Sagar).
+
+Rules:
+- If the subject refers to: I, me, my, mine, myself, Sagar → return: "user"
+- If the text mentions a specific relationship (mom, mother, dad, father, brother, sister,
+  friend, cousin, teacher, boss, girlfriend, boyfriend, wife, husband, colleague, etc.)
+  → return exactly that relationship (lowercase).
+- If none of the above appear → return: "unknown".
+
+Strict Output Rules:
+- Return exactly ONE word.
+- No newline, no extra spaces, no punctuation.
+- Output must be on a single line.
+
+Text: ${text}
+
+Return only the final one-word answer.`
+            }
+        ]
     });
-    const name = await generateText({
-        model: google("gemini-2.0-flash-lite"),
-        prompt: `Based on the following text, if mention in the text return me the name of the main Subject user, if not mention return me with the empty string :
-                    Now but when the name is I or me or user or my return as "Sagar"
-                    ${text}. Return response in one word`
+    console.log(cleanJSON(personId.choices[0].message.content));
+    const name = await openai.chat.completions.create({
+        model: "tngtech/deepseek-r1t2-chimera:free",
+        messages: [
+            {
+                role: "user",
+                content: `In the below text based on who i am referring to determine the name of the referred person : ${text}
+                    Rules - 
+                    Do not add anything extra
+                    Do not add any extra symbol
+                    Just share the name in the response`
+            }
+        ]
     });
+    console.log(cleanJSON(name.choices[0].message.content));
     return {
-        personId: personId.text,
-        name: name.text
+        personId: cleanJSON(personId.choices[0].message.content),
+        name: cleanJSON(name.choices[0].message.content)
     };
 }
 export async function detectHabitOrGoal(text) {
     try {
-        const response = await generateText({
-            model: google("gemini-2.0-flash-lite"),
-            prompt: `You are a classifier. Decide whether the following user statement is:
+        const response = await openai.chat.completions.create({
+            model: "google/gemma-2-9b-it",
+            messages: [
+                {
+                    role: "user",
+                    content: `You are a classifier. Decide whether the following user statement is:
                     - a GOAL (long-term objective, multi-step, months/weeks),
                     - a HABIT (recurring action or routine, daily/weekly),
 
                     Return exactly one word: goal, habit, or none.
-
+                    STRICT RULES - 
+                    - No newline, no extra spaces, no punctuation.
+                    - Output must be on a single line.
                     Statement: ${text}`
+                }
+            ]
         });
-        return response.text.trim();
+        console.log(cleanJSON(response.choices[0].message.content));
+        return cleanJSON(response.choices[0].message.content);
     }
     catch (error) {
         return "Error while detecting habit or Goal";
@@ -104,14 +170,20 @@ export async function detectHabitOrGoal(text) {
 }
 export async function extractHabitFrequency(text) {
     try {
-        const response = await generateText({
-            model: google("gemini-2.0-flash-lite"),
-            prompt: `Extract the repetition frequency conveyed by this statement. Return one word:
+        const response = await openai.chat.completions.create({
+            model: "google/gemma-2-9b-it",
+            messages: [
+                {
+                    role: "user",
+                    content: `Extract the repetition frequency conveyed by this statement. Return one word:
                     "daily, weekly, monthly, custom, none"
 
                     Statement: ${text} `
+                }
+            ]
         });
-        return response.text.trim();
+        console.log(cleanJSON(response.choices[0].message.content));
+        return cleanJSON(response.choices[0].message.content);
     }
     catch (error) {
         return "Error while extracting habitFrequency";
@@ -120,19 +192,46 @@ export async function extractHabitFrequency(text) {
 export async function extractGoalDeadline(text) {
     try {
         const date = new Date().toISOString().split("T")[0];
-        const response = await generateText({
-            model: google("gemini-2.0-flash-lite"),
-            prompt: `Extract the goal deadline from the following text.
-                    Return the deadline as a date in YYYY-MM-DD format.
-                    If the text mentions words like “today”, “tomorrow”, or “next week”, convert them to an actual date in YYYY-MM-DD format based on the current date.
-                    If no deadline is mentioned, return "none".
-                    Output must contain only the date (one token, no explanation, no punctuation).
-                    If the days is in like 30 days or in 20 days convert it into into YYYY-MM-DD format with the help of current date.
-                    Current date : ${date}
-                    Text: ${text}`
+        const response = await openai.chat.completions.create({
+            model: "meta-llama/llama-3.1-8b-instruct",
+            messages: [
+                {
+                    role: "user",
+                    content: `
+Your task is to extract a deadline.
+
+Return ONLY a valid ISO date (YYYY-MM-DD) or "none".
+
+STRICT RULES:
+- No explanation.
+- No code.
+- No examples.
+- No comments.
+- No extra words.
+- No newline.
+- Output must be EXACTLY one of:
+  - a date in YYYY-MM-DD format
+  - the word: none
+
+Interpretation Rules:
+- "today" = Current date
+- "tomorrow" = Current date + 1 day
+- "next week" = current date + 7 days
+- "next month" = last day of next month
+- "end of month" = last day of current month
+- "in X days" = add X days
+- If ambiguous → return "none"
+
+Current date: ${date}
+Text: ${text}
+
+Return ONLY the final date or "none".
+`
+                }
+            ]
         });
-        const returedDate = new Date(response.text);
-        return returedDate;
+        console.log(cleanJSON(response.choices[0].message.content));
+        return new Date(cleanJSON(response.choices[0].message.content));
     }
     catch (error) {
         const date = new Date().toISOString().split("T")[0];
@@ -159,13 +258,93 @@ Return only one number.
 User update: "${text}"
 `;
     try {
-        const response = await generateText({
-            model: google("gemini-2.0-flash-lite"),
-            prompt: prompt
+        const response = await openai.chat.completions.create({
+            model: "meta-llama/llama-3.1-8b-instruct",
+            messages: [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ]
         });
-        return parseInt(response.text);
+        return parseInt(cleanJSON(response.choices[0].message.content));
     }
     catch (error) {
         return 0;
+    }
+}
+export async function getTasks(text) {
+    try {
+        var date = new Date().toISOString();
+        date = date.slice(0, 10);
+        console.log(date);
+        const response = await openai.chat.completions.create({
+            model: "meta-llama/llama-3.1-8b-instruct",
+            messages: [
+                {
+                    role: "developer",
+                    content: `In the following text what is the task I am asked to do, what are the key things that I can take out from the following text : ${text}
+                
+                if asked for date, respond in the date structure DD/MM/YYYY on the basis of current date : ${date}
+                Date Interpretation Rules:
+- "today" = Current date
+- "tomorrow" = Current date + 1 day
+- "next week" = current date + 7 days
+- "next month" = last day of next month
+- "end of month" = last day of current month
+- "in X days" = add X days
+- If ambiguous → return "none"
+                {
+                "task": "Set a reminder for a meeting",
+                "date" : "12/01/2025",
+                "time" : "12:00pm"
+                }
+                create a json response and add all the important keys from the text, 
+                Remeber it there can be other keys like time person location meeting etc.
+                Do get those text and send me
+                remember there can be other keys too, this was just for example, add as many keys as you want like name, location, people, time range etc.
+
+                STRICT RULES:
+                Do not provide any extra information
+                Do not give any new punctuation marks or slash or new line or any kind of symbol
+                Directly provide the response in the given format as above
+                Do not add anything extra
+                Just provide me the json response and nothing extra information not anything extra
+                
+                
+
+ Use EXACTLY this schema:
+ {
+   "task": string,
+   "date": string (DD/MM/YYYY or empty),
+   "startTime": string (HH:mm in 24h or empty),
+   "endTime": string (HH:mm in 24h or empty),
+   "timeRange": string,
+   "person": string,
+   "location": string,
+   "people": string,
+   "agenda": string
+ }
+ STRICT RULES:
+                Do not provide any extra information
+                Do not give any new punctuation marks or slash or new line or any kind of symbol
+                Directly provide the response in the given format as above
+                Do not add anything extra
+                Just provide me the json response and nothing extra information not anything extra`
+                }
+            ]
+        });
+        const content = response.choices[0].message.content;
+        if (!content) {
+            throw new Error("Cannot derive content from the text");
+        }
+        console.log(content);
+        const result = JSON.parse(content);
+        console.log(date.slice(0, 10));
+        return result;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
     }
 }

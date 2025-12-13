@@ -1,5 +1,6 @@
 import { cosineSimilarity } from "ai";
 import Memory from "../models/memory.js";
+import { mcp } from "../client.js";
 export async function tryLinkHabitToGoal(habitMemory) {
     // find candidate goals
     const allGoals = await Memory.find({ isGoal: true });
@@ -23,4 +24,29 @@ export async function tryLinkHabitToGoal(habitMemory) {
         return { linked: true, goalId: best._id, score: bestScore };
     }
     return null;
+}
+export async function handleMemoryTool(req, res) {
+    try {
+        const { intent, text } = req.body;
+        const response = await mcp.callTool({
+            name: intent,
+            arguments: { text }
+        });
+        if (!response || !response.content) {
+            return res.json({
+                text,
+                intent,
+                message: "No response from the tool"
+            });
+        }
+        const contentArray = response.content;
+        const message = contentArray[0]?.text || "No message returned";
+        console.log(response);
+        return res.json({ text, intent, message });
+    }
+    catch (error) {
+        return res.json({
+            error: `Error while calling the tool: ${error}`
+        });
+    }
 }
