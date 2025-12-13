@@ -10,15 +10,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -740,
-        700
+        -840,
+        520
       ],
-      "id": "b56eae2a-b4ec-4cc1-9a4e-0bca347dc60f",
+      "id": "1bfe9ca9-33ed-42b7-a89a-43de8062afcf",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2",
       "credentials": {
         "telegramApi": {
-          "id": "1sKVHjzCsr5hx3XC",
+          "id": "ouUpxikk1dDL7OrL",
           "name": "Telegram account"
         }
       }
@@ -26,7 +26,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://dimensions-disable-built-responsibility.trycloudflare.com/getIntent",
+        "url": "https://slot-markets-letting-tribute.trycloudflare.com/getIntent",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -41,16 +41,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -520,
-        700
+        -620,
+        520
       ],
-      "id": "475caa10-67bf-4b22-be4d-e4c1ef088b14",
+      "id": "b015b4b9-aa42-4746-bc89-4906f02b0b92",
       "name": "HTTP Request"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://ken-forbes-valley-farm.trycloudflare.com/memory/{{ $json.intent }}",
+        "url": "=https://dem-distributed-witch-livecam.trycloudflare.com/memory/{{ $json.intent }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -69,10 +69,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        140,
-        880
+        40,
+        700
       ],
-      "id": "6d41dba4-e65a-45a7-bc05-30324a976991",
+      "id": "9cead444-31ce-48bf-a8e7-75cd87247a74",
       "name": "HTTP Request1"
     },
     {
@@ -84,15 +84,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        420,
-        880
+        320,
+        700
       ],
-      "id": "bc7c283b-3507-4242-bc54-971487d36942",
+      "id": "5755df28-2d37-4930-92cb-bf64e99baf8a",
       "name": "Telegram",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
       "credentials": {
         "telegramApi": {
-          "id": "1sKVHjzCsr5hx3XC",
+          "id": "ouUpxikk1dDL7OrL",
           "name": "Telegram account"
         }
       }
@@ -135,10 +135,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -300,
-        700
+        -400,
+        520
       ],
-      "id": "851ae6af-0179-4f65-b981-0a4124e14707",
+      "id": "994b948f-522f-4edf-8ca4-7e1afc4d1cfd",
       "name": "If"
     },
     {
@@ -169,16 +169,16 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        340,
-        560
+        240,
+        380
       ],
-      "id": "2b80f755-f384-43c0-a14d-44a0b405988e",
+      "id": "a03df79e-07c8-4e87-b7c9-8cf29dfe468b",
       "name": "If1"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ken-forbes-valley-farm.trycloudflare.com/memory/save-goalorhabbit",
+        "url": "https://dem-distributed-witch-livecam.trycloudflare.com/memory/save-goalorhabbit",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -201,16 +201,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        540,
-        380
+        440,
+        200
       ],
-      "id": "e1b776c8-74b2-4dad-a6a6-000e858057df",
+      "id": "60165f2b-02b0-49e7-af52-bf57184d78ff",
       "name": "HTTP Request3"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ken-forbes-valley-farm.trycloudflare.com/memory/save-goalorhabbit",
+        "url": "https://dem-distributed-witch-livecam.trycloudflare.com/memory/save-goalorhabbit",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -233,10 +233,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        600,
-        640
+        500,
+        460
       ],
-      "id": "3abf3749-07bf-47ba-9e3e-ff92d5563638",
+      "id": "4b13ae55-40ea-47b3-b329-e12c01ff1c27",
       "name": "HTTP Request4"
     },
     {
@@ -267,16 +267,16 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -120,
-        360
+        -220,
+        180
       ],
-      "id": "b260cc87-8e5c-46a2-9fef-573bcf10e228",
+      "id": "a58e77d4-1f3b-4c55-aa93-942cad7e294b",
       "name": "If2"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ken-forbes-valley-farm.trycloudflare.com/getTask",
+        "url": "https://dem-distributed-witch-livecam.trycloudflare.com/getTask",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -295,10 +295,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        100,
-        180
+        0,
+        0
       ],
-      "id": "8a63d49d-91c6-4457-9b47-be20b96476f3",
+      "id": "b3b039ed-7609-4ecf-bfb4-56caf6e51e56",
       "name": "HTTP Request5"
     },
     {
@@ -329,14 +329,14 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        400,
-        180
+        300,
+        0
       ],
-      "id": "34ce9f59-22e5-4b1a-bcca-0d1b07c366cd",
+      "id": "1e1853c6-ab26-4d81-9331-efbb02eb4efd",
       "name": "Google Calendar",
       "credentials": {
         "googleCalendarOAuth2Api": {
-          "id": "LTCsvHywUjHlg22U",
+          "id": "1nXbezjO2ulwjjHI",
           "name": "Google Calendar account"
         }
       }
@@ -344,7 +344,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ken-forbes-valley-farm.trycloudflare.com/getTask",
+        "url": "https://dem-distributed-witch-livecam.trycloudflare.comhttps://ken-forbes-valley-farm.trycloudflare.com/getTask",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -363,10 +363,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        840,
-        640
+        740,
+        460
       ],
-      "id": "bf9478ce-0d48-4f7a-a73d-756c10c1a33c",
+      "id": "6d1f2de8-338e-45ba-9d99-8df837869de7",
       "name": "HTTP Request6"
     },
     {
@@ -397,14 +397,14 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        1100,
-        620
+        1000,
+        440
       ],
-      "id": "ace46010-e157-4be3-b762-8401481245fc",
+      "id": "b9f2bb7c-84e5-405b-952e-2ab446a21e71",
       "name": "Google Calendar1",
       "credentials": {
         "googleCalendarOAuth2Api": {
-          "id": "LTCsvHywUjHlg22U",
+          "id": "1nXbezjO2ulwjjHI",
           "name": "Google Calendar account"
         }
       }
@@ -412,7 +412,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ken-forbes-valley-farm.trycloudflare.com/getTask",
+        "url": "https://dem-distributed-witch-livecam.trycloudflare.com/getTask",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -431,10 +431,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        800,
-        360
+        680,
+        180
       ],
-      "id": "bb115863-835f-4eb2-8c34-168934c917e3",
+      "id": "18a21786-bbb8-449d-b170-7402802aabb2",
       "name": "HTTP Request7"
     },
     {
@@ -445,8 +445,8 @@
           "mode": "list",
           "cachedResultName": "sagaradmane6@gmail.com"
         },
-        "start": "={{ $json.result.startTime }}",
-        "end": "={{ $json.result.startTime }}",
+        "start": "={{ $json.result.date }}",
+        "end": "={{ $json.result.date }}",
         "useDefaultReminders": false,
         "additionalFields": {
           "attendees": [],
@@ -458,15 +458,81 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        1060,
-        340
+        900,
+        200
       ],
-      "id": "f214da5a-745d-48c8-8297-ffb83726fbe8",
+      "id": "c4c9882a-a11d-42a2-917d-7cd483ea16cb",
       "name": "Google Calendar2",
       "credentials": {
         "googleCalendarOAuth2Api": {
-          "id": "LTCsvHywUjHlg22U",
+          "id": "1nXbezjO2ulwjjHI",
           "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1180173785",
+        "text": "=Sure, consider it done👍👍",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        660,
+        -40
+      ],
+      "id": "d315344c-ddd9-447a-9a2f-36c804246b0a",
+      "name": "Telegram1",
+      "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
+      "credentials": {
+        "telegramApi": {
+          "id": "ouUpxikk1dDL7OrL",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1180173785",
+        "text": "=reminder added to calender",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1260,
+        220
+      ],
+      "id": "2faeb601-d860-43f9-8531-ace4f52f90d1",
+      "name": "Telegram2",
+      "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
+      "credentials": {
+        "telegramApi": {
+          "id": "ouUpxikk1dDL7OrL",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1180173785",
+        "text": "=Habit added to calendar",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1240,
+        400
+      ],
+      "id": "f3623861-c53d-481c-ac34-a95bbb79eccc",
+      "name": "Telegram3",
+      "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425",
+      "credentials": {
+        "telegramApi": {
+          "id": "ouUpxikk1dDL7OrL",
+          "name": "Telegram account"
         }
       }
     }
@@ -592,6 +658,17 @@
         ]
       ]
     },
+    "Google Calendar": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "HTTP Request6": {
       "main": [
         [
@@ -603,11 +680,33 @@
         ]
       ]
     },
+    "Google Calendar1": {
+      "main": [
+        [
+          {
+            "node": "Telegram3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "HTTP Request7": {
       "main": [
         [
           {
             "node": "Google Calendar2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar2": {
+      "main": [
+        [
+          {
+            "node": "Telegram2",
             "type": "main",
             "index": 0
           }
