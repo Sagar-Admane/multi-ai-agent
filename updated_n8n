@@ -516,8 +516,8 @@
           "mode": "list",
           "cachedResultName": "sagaradmane6@gmail.com"
         },
-        "timeMin": "={{ $now.plus({ days: 1 }).startOf('day').toISO() }}",
-        "timeMax": "={{ $now.plus({ days: 1 }).endOf('day').toISO() }}",
+        "timeMin": "={{ $now.startOf('day').toISO() }}",
+        "timeMax": "={{ $now.endOf('day').toISO() }}",
         "options": {}
       },
       "type": "n8n-nodes-base.googleCalendar",
@@ -538,7 +538,7 @@
     {
       "parameters": {
         "chatId": "1180173785",
-        "text": "=Your Today's Schedule is : \n\n",
+        "text": "=Your Today's Schedule is : \n📌 *{{$json.summary}}*\n📝 {{$json.description}}\n\n",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
