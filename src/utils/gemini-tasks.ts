@@ -450,3 +450,74 @@ Date rules:
         return error;
     }
 }
+
+export async function getTheDate(text : string){
+
+    const prompt = `You are a strict date-range parser.
+
+Your job:
+Convert natural language time expressions into an exact date range.
+
+Rules:
+- Output ONLY valid minified JSON
+- No text, no explanation, no markdown
+- No newlines, no backticks
+- Use ISO format: YYYY-MM-DD
+
+Output schema:
+{"from":"YYYY-MM-DD","to":"YYYY-MM-DD"}
+
+Date interpretation rules:
+- "today" = current date
+- "yesterday" = current date - 1 day
+- "tomorrow" = current date + 1 day
+- "last week" = previous 7 days ending yesterday
+- "this week" = start of current week to today
+- "last month" = first day of previous month to last day of previous month
+- "this month" = first day of current month to today
+- "from X to Y" = parse both sides
+- "since X" = from X to today
+- "till today" = from earliest inferred date to today
+- explicit dates like "2024-01-15" or "15 Jan 2024" must be parsed
+- If only one date is mentioned, assume it is BOTH from and to
+- If ambiguous or impossible, return {"from":"none","to":"none"}
+
+Important:
+- Always respect the provided current date
+- Never guess future dates unless explicitly stated
+- Never include time (only date)
+`
+
+    try {
+        const response = await openai.chat.completions.create({
+            model : "meta-llama/llama-3.1-8b-instruct",
+            messages : [
+                {
+                    role : "developer",
+                    content : `${prompt}
+                    text : ${text},
+                    date : ${new Date().toISOString().slice(0,10)}`
+                }
+            ]
+        })
+
+        console.log(response.choices[0].message.content)
+        if(response.choices[0].message.content){
+            var result = JSON.parse(response.choices[0].message.content)
+        } else {
+            return {
+                ffrom : new Date(),
+                fto : new Date()
+            }
+        }
+        return {
+            ffrom : result.from,
+            fto : result.to
+        }
+    } catch (error) {
+        return {
+            ffrom : new Date(),
+            fto : new Date()
+        }
+    }
+}
