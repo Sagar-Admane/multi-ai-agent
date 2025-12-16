@@ -402,25 +402,42 @@ export async function getTasks(text : string){
 export async function getBankStatementParser(text : string) {
     try {
         //A/c X2700 credited with Rs. 20.00 on 16-Dec-25 from JITENDER RANA RRN: 115725617997 -Bank of Maharashtra (Incoming - AX-MAHABK-S )
+        const date = new Date();
+        const response = await openai.chat.completions.create({
+  model: "meta-llama/llama-3.1-8b-instruct",
+  messages: [
+    {
+      role: "system",
+      content: `
+You are a strict JSON generator.
 
-        const response =  await openai.chat.completions.create({
-            model : "meta-llama/llama-3.1-8b-instruct",
-            messages : [
-                {
-                    role : "assistant",
-                    content : `I am providing you with the text you have to respond with the output in the following format : 
-                    {
-                        type : "string" -> credited/debited,
-                        amount : integer,
-                        date : "date",
-                        merchant : "string" -> name of to whom money is sent or who has sent the money,
-                        bankName : "string"
-                    } 
-                        Now on the basis of text give me response in above json structure : ${text}
-                        ONLY RESPOND WITH THE JSON NOT ANY EXTRA INFORMATION OR BACKSLASH OR NEWLINE ETC`,   
-                }
-            ]
-        })
+Rules:
+- Output ONLY valid minified JSON
+- No extra text, no explanations
+- No backticks
+- No newlines
+- No comments
+- No trailing commas
+
+JSON schema:
+{"type":"credited|debited","amount":number,"date":"string","merchant":"string","bankName":"string"}
+
+Date rules:
+- today = current date
+- tomorrow = current date + 1
+- next week = +7 days
+- next month = last day of next month
+- end of month = last day of current month
+- in X days = add X days
+- ambiguous = "none"
+`
+    },
+    {
+      role: "user",
+      content: `Text: ${text}\nCurrent date: ${date}`
+    }
+  ]
+});
 
         const valjson = cleanJSON(response.choices[0].message.content);
         const valid = JSON.parse(valjson);
