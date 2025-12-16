@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1200,
-        1880
+        -660,
+        760
       ],
-      "id": "441da2f5-eb47-492f-8e20-c97013b5ae01",
+      "id": "318c628c-676c-4c70-92af-a536565c367d",
       "name": "Telegram Trigger",
       "webhookId": "f8a3c7a9-b45a-404b-a742-ca3b58790eb2"
     },
@@ -35,10 +35,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -980,
-        1880
+        -440,
+        760
       ],
-      "id": "a7bc9fc9-7f16-4d24-b4b5-e4acbb0ccb60",
+      "id": "a1b28f6d-e6cf-471c-b0af-ec31bbf81921",
       "name": "HTTP Request"
     },
     {
@@ -63,10 +63,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -320,
-        2060
+        0,
+        960
       ],
-      "id": "a6b40566-26f1-40e6-a875-58b82dea1e4a",
+      "id": "51dc36b1-f53a-47b6-b148-ebfefa0b42b1",
       "name": "HTTP Request1"
     },
     {
@@ -78,10 +78,10 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -40,
-        2060
+        220,
+        960
       ],
-      "id": "d08e714d-deeb-4aee-84a8-e83ee4814b37",
+      "id": "3e839357-43ef-4927-b088-d0415b052b6e",
       "name": "Telegram",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425"
     },
@@ -123,10 +123,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -760,
-        1880
+        -220,
+        760
       ],
-      "id": "56a58ad1-4489-4e61-908d-daad7101cbcc",
+      "id": "23f2291e-bdb4-470d-8fdc-1b5ee4c5d111",
       "name": "If"
     },
     {
@@ -157,10 +157,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -120,
-        1740
+        220,
+        760
       ],
-      "id": "33cccc91-35ca-4a32-ac50-66e9b2173539",
+      "id": "81b28ef1-acfd-4dfa-a53b-ad06b1380f92",
       "name": "If1"
     },
     {
@@ -189,10 +189,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        80,
-        1560
+        440,
+        660
       ],
-      "id": "028a4e59-5007-4873-a79c-76b52aa11a6e",
+      "id": "241d70fb-a777-435a-8e92-8d71a0cb4ed3",
       "name": "HTTP Request3"
     },
     {
@@ -221,10 +221,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        140,
-        1820
+        440,
+        860
       ],
-      "id": "f21a5c88-1de8-4713-a8f9-3b0904ba532a",
+      "id": "a5fbb353-8d43-469a-ad25-3ae4b2c61cdb",
       "name": "HTTP Request4"
     },
     {
@@ -255,10 +255,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -580,
-        1540
+        0,
+        660
       ],
-      "id": "e79f2bc1-8816-42f2-b41e-8d1d5a3c2231",
+      "id": "38244b29-57f9-4432-a36b-82e525285b49",
       "name": "If2"
     },
     {
@@ -283,10 +283,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -360,
-        1360
+        220,
+        460
       ],
-      "id": "96d09bce-4117-49ad-bd9e-ad21202540f1",
+      "id": "ac61a502-3179-4cb6-ba2e-384e458c61d8",
       "name": "HTTP Request5"
     },
     {
@@ -317,11 +317,17 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        -60,
-        1360
+        440,
+        460
       ],
-      "id": "89b9373d-a0da-467f-8ad0-0fe69426e72e",
-      "name": "Google Calendar"
+      "id": "b764efe9-4ab6-4a36-b5b0-5dcf95eed8fe",
+      "name": "Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "nmf9fIVJOgUtfMxc",
+          "name": "Google Calendar account"
+        }
+      }
     },
     {
       "parameters": {
@@ -345,10 +351,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        380,
-        1820
+        660,
+        860
       ],
-      "id": "4c48b446-b726-44d3-9ff6-ba128163dd88",
+      "id": "fe1a5418-ad14-4d4d-9b81-64c4ae23910b",
       "name": "HTTP Request6"
     },
     {
@@ -379,11 +385,17 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        640,
-        1800
+        880,
+        860
       ],
-      "id": "f9a77c85-4480-447e-9bae-3b1cbd92edb5",
-      "name": "Google Calendar1"
+      "id": "cce37c4e-4dbd-4583-b241-a541efd737f5",
+      "name": "Google Calendar1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "nmf9fIVJOgUtfMxc",
+          "name": "Google Calendar account"
+        }
+      }
     },
     {
       "parameters": {
@@ -407,10 +419,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        320,
-        1540
+        660,
+        660
       ],
-      "id": "7f97c2f7-340e-4908-b5b1-ccd1350c4298",
+      "id": "c4fccf5b-0e7c-4e8f-b61d-5156dedba1ed",
       "name": "HTTP Request7"
     },
     {
@@ -434,11 +446,17 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        540,
-        1560
+        880,
+        660
       ],
-      "id": "c537df0b-ad03-49b3-b2f4-bfbf53869d2c",
-      "name": "Google Calendar2"
+      "id": "00f271cb-c1ce-4b3e-8ee4-0d139b2a0871",
+      "name": "Google Calendar2",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "nmf9fIVJOgUtfMxc",
+          "name": "Google Calendar account"
+        }
+      }
     },
     {
       "parameters": {
@@ -449,10 +467,10 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        300,
-        1320
+        660,
+        460
       ],
-      "id": "a98a5d25-017a-46ee-ba51-8b09bbb269d5",
+      "id": "86b8e162-d773-4830-936e-981fa54f02ca",
       "name": "Telegram1",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425"
     },
@@ -465,10 +483,10 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        900,
-        1580
+        1100,
+        660
       ],
-      "id": "b0118b4d-7ac8-44e1-8171-6594d676c170",
+      "id": "1f7ae317-c245-4b03-b55c-da144002b1db",
       "name": "Telegram2",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425"
     },
@@ -481,10 +499,10 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        880,
-        1760
+        1100,
+        860
       ],
-      "id": "14630ce8-726c-4922-8d1e-fceb8a4763c3",
+      "id": "61d3d0a0-5b71-4109-b47d-1df80bf012e9",
       "name": "Telegram3",
       "webhookId": "71062f63-81e4-4cc6-990a-8d8dc5662425"
     },
@@ -501,10 +519,10 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1320,
-        200
+        -660,
+        160
       ],
-      "id": "dd2fe75e-ea09-4cbe-8205-1a461357c419",
+      "id": "967a3a11-0255-4e39-b711-c912801f1f8c",
       "name": "Schedule Trigger"
     },
     {
@@ -523,10 +541,10 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        -800,
-        200
+        -440,
+        160
       ],
-      "id": "3c4bbe0b-deda-477a-aba6-5667c0c375a5",
+      "id": "5198a841-d8cc-48ec-9342-da3bf681f11e",
       "name": "Google Calendar3",
       "credentials": {
         "googleCalendarOAuth2Api": {
@@ -544,18 +562,12 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        740,
+        440,
         0
       ],
-      "id": "815ae341-cf00-4169-bc55-43d2fcd5aa16",
+      "id": "b29ca1d4-b526-47c5-af65-c5cfcdd5f496",
       "name": "Telegram4",
-      "webhookId": "643b37b7-b95b-4cc6-982c-e426d9e4e7e2",
-      "credentials": {
-        "telegramApi": {
-          "id": "eCyE1euYJ2s8ggZX",
-          "name": "Telegram account"
-        }
-      }
+      "webhookId": "643b37b7-b95b-4cc6-982c-e426d9e4e7e2"
     },
     {
       "parameters": {
@@ -566,10 +578,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -420,
-        200
+        -220,
+        160
       ],
-      "id": "e95b26b5-8dbf-4365-895b-d5390fb6a414",
+      "id": "3aa9e3a5-8c96-4429-8b49-39e7ed9f18af",
       "name": "Loop Over Items"
     },
     {
@@ -578,10 +590,10 @@
       "name": "Replace Me",
       "typeVersion": 1,
       "position": [
-        460,
+        0,
         200
       ],
-      "id": "59d9bfb8-1b3a-4b1d-9a72-85f3bea4982e"
+      "id": "13e7d7dc-83d1-4651-bc04-1142d16db716"
     },
     {
       "parameters": {
@@ -603,7 +615,7 @@
         0,
         0
       ],
-      "id": "d904f2c9-2a92-46c5-8fca-dcc0d2bae33c",
+      "id": "f5c025ab-a4ba-491c-912c-a954d73b0e4f",
       "name": "Aggregate"
     },
     {
@@ -616,8 +628,34 @@
         220,
         0
       ],
-      "id": "8edee4f3-1672-4837-b33b-4281d0bc655e",
+      "id": "8385a484-20fd-4be4-a3e3-81ba3bb2a788",
       "name": "Code"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -660,
+        980
+      ],
+      "id": "918323e8-7be5-4636-85f6-96bc6d58aca3",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nQ3Cz72ybSKhyugG",
+          "name": "Gmail account"
+        }
+      }
     }
   ],
   "connections": {
@@ -867,6 +905,11 @@
             "index": 0
           }
         ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        []
       ]
     }
   },

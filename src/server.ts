@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateGoalProgress, generateImportanceScore, generateTasks, genereateRelationship} from "../src/utils/gemini-tasks.js"
+import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateGoalProgress, generateImportanceScore, generateTasks, genereateRelationship, getBankStatementParser} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
 import EpisodicMemory from "../src/models/episodicMemory.js";
 import Memory from "../src/models/memory.js";
@@ -458,6 +458,31 @@ server.registerTool(
         }
     }
 )
+
+server.registerTool(
+    "parse-sms",
+    {
+        title : "Sms parser for the bank",
+        description : "This tool takes the text and parse it to get the particular format",
+        inputSchema : {
+            text : z.string()
+        }
+    }, 
+    async ({text}) => {
+        try {
+            const response = await getBankStatementParser(text);
+            console.log(response);
+            return {
+                content : [{type : "text", text : `${JSON.stringify(response)}`}]
+            }
+        } catch (error) {
+            return {
+                content : [{type : "text", text :  `${error}`}]
+            }
+        }
+    }
+)
+
 
 async function main(){
     const transport = new StdioServerTransport();
