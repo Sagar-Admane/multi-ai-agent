@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateGoalProgress, generateImportanceScore, generateTasks, genereateRelationship, getBankStatementParser} from "../src/utils/gemini-tasks.js"
+import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateGoalProgress, generateImportanceScore, generateTasks, genereateRelationship, getBankStatementParser, getTheDate} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
 import EpisodicMemory from "../src/models/episodicMemory.js";
 import Memory from "../src/models/memory.js";
@@ -519,6 +519,33 @@ server.registerTool(
         } catch (error) {
             return {
                 content : [{type : "text", text :  `${error}`}]
+            }
+        }
+    }
+)
+
+
+server.registerTool(
+    "get-transactions",
+    {
+        title : "get Transactions",
+        description : "Gets transaction",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async ({text}) => {
+        try {
+            const todaysDate = Date.now();
+            const {ffrom, fto}  = await getTheDate(text);
+
+            return {
+                content : [{type : "text", text : "Something this tool is unfinished"}]
+            }
+
+        } catch (error) {
+            return {
+                content : [{type : "text", text : `${error}`}]
             }
         }
     }
