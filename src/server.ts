@@ -483,6 +483,30 @@ server.registerTool(
     }
 )
 
+server.registerTool(
+    "parse-manualExpense",
+    {
+        title : "Parse manual expense",
+        description : "This tool helps to parse the manual expense",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        try {
+            const response  = await getBankStatementParser(text);
+            console.log(response);
+            return {
+                content : [{type : "text", text : `${response}`}]
+            }
+        } catch (error) {
+            return {
+                content : [{type : "text", text :  `${error}`}]
+            }
+        }
+    }
+)
+
 
 async function main(){
     const transport = new StdioServerTransport();
