@@ -9,6 +9,7 @@ import Memory from "../src/models/memory.js";
 import Relationship from "../src/models/relationshipMemory.js";
 import { cosineSimilarity } from 'ai';
 import { tryLinkHabitToGoal } from './utils/helperFunction.js';
+import Expense from "../src/models/expenseModel.js"
 
 console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
 
@@ -471,6 +472,14 @@ server.registerTool(
     async ({text}) => {
         try {
             const response = await getBankStatementParser(text);
+            const expense = new Expense({
+                type : response.type,
+                amount : response.amount,
+                date : response.date,
+                merchant : response.merchant,
+                bankName : response.bankName
+            })
+            expense.save();
             console.log(response);
             return {
                 content : [{type : "text", text : `${JSON.stringify(response)}`}]
@@ -495,6 +504,14 @@ server.registerTool(
     async({text}) => {
         try {
             const response  = await getBankStatementParser(text);
+            const expense = new Expense({
+                type : response.type,
+                amount : response.amount,
+                date : response.date,
+                merchant : response.merchant,
+                bankName : response.bankName
+            })
+            expense.save();
             console.log(response);
             return {
                 content : [{type : "text", text : `${response}`}]
