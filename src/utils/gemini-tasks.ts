@@ -442,6 +442,8 @@ Date rules:
         const valjson = cleanJSON(response.choices[0].message.content);
         const valid = JSON.parse(valjson);
         console.log(valid);
+        const date1 = new Date(valid.date);
+        valid.date = date1;
         return valid;
     } catch (error) {
         console.log(error)
