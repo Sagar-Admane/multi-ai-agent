@@ -49,7 +49,11 @@ Date rules:
 
 
         const valjson = cleanJSON(response.choices[0].message.content);
-        const valid = JSON.parse(valjson);              
+        const valid = JSON.parse(valjson);   
+
+        const date1 = new Date(valid.date);
+        console.log(date1);
+        
         console.log(valid);
         return valid;
     } catch (error) {
