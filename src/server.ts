@@ -538,9 +538,20 @@ server.registerTool(
         try {
             const todaysDate = Date.now();
             const {ffrom, fto}  = await getTheDate(text);
+            const from = new Date(ffrom);
+            const to = new Date(fto);
+
+            const expenses = await Expense.find({
+                createdAt : {
+                    $gte : from,
+                    $lte : to
+                }
+            }).sort({createdAt : -1});
+
+
 
             return {
-                content : [{type : "text", text : "Something this tool is unfinished"}]
+                content : [{type : "text", text : `${JSON.stringify(expenses, null, 2)}`}]
             }
 
         } catch (error) {
@@ -551,6 +562,83 @@ server.registerTool(
     }
 )
 
+server.registerTool(
+    "get-TransactionOnType",
+    {
+        title : "Get transaction on the basis of type",
+        description : "Get transaction on the basis of type",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async ({text}) => {
+        try {
+            const getType = text.split(" ").includes("credit") || text.split(" ").includes("credited") ? "credited" : "debited";
+            const {ffrom, fto} = await getTheDate(text);
+            const from = new Date(ffrom);
+            const to = new Date(fto);
+            const expenses = await Expense.find({
+                createdAt : {
+                    $gte : from,
+                    $lte : to
+                },
+                type : getType
+            })
+
+            return {
+                content : [{type : "text", text : `${JSON.stringify(expenses)}`}]
+            }
+        } catch (error) {
+            return {
+                content : [{type : "text", text : `${error}`}]
+            }
+        }
+    }
+)
+
+
+server.registerTool(
+    "getLatestBalance",
+    {
+        title  : "Get The Balance in the bank",
+        description : "This tool will get the balance in the bank account",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async ({text}) => {
+        try {
+            const balance = await Expense.aggregate([
+                {
+                    $group : {
+                        _id : null,
+                        balance : {
+                            $sum : {
+                                $cond : [
+                                    { $eq : ["$type", "credited"] },
+                                    "$amount",
+                                    {$multiply : ["$amount", -1]}
+                                ]
+                            }
+                        }
+                    }
+                }
+            ])
+
+            const result = balance[0]?.balance || 0;
+
+            return {
+                content : [{type : "text", text : `${result}`}]
+            }
+
+
+        } catch (error) {
+            return {
+                content : [{type : "text", text : `${error}`}]
+            }
+        }
+    }
+)
 
 async function main(){
     const transport = new StdioServerTransport();
