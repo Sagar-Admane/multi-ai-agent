@@ -640,6 +640,36 @@ server.registerTool(
     }
 )
 
+server.registerTool(
+    "upsertBudget",
+    {
+        title : "Upsert a budget",
+        description : "Update or set a budget",
+        inputSchema : {
+            text : z.string()
+        }
+    },
+    async({text}) => {
+        try {
+            const category = text.split(" ").includes("update") ? "Update" : "Set";
+            const Nan = text.split(" ").filter(m => !isNaN(parseInt(m)));
+            if(Nan.length === 0 || Nan.length>1){
+                return {
+                    content : [{type : "text", text : `Please give me a single number`}]
+                }
+            }
+            const budget = parseInt(Nan[0]);
+            return {
+                content : [{type : "text", text : `${category} the budget to ${budget}`}]
+            }
+        } catch (error) {
+            return {
+                content : [{type : "text", text : `${error}`}]
+            }
+        }
+    }
+)
+
 async function main(){
     const transport = new StdioServerTransport();
     await connectDB();
