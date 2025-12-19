@@ -10,6 +10,7 @@ import Relationship from "../src/models/relationshipMemory.js";
 import { cosineSimilarity } from 'ai';
 import { tryLinkHabitToGoal } from './utils/helperFunction.js';
 import Expense from "../src/models/expenseModel.js"
+import cleanJSON from './utils/utils.js';
 
 console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
 
@@ -72,8 +73,10 @@ server.registerTool(
             }
             ai_response = await generateAIRespone(text)
 
+            ai_response = cleanJSON(ai_response);
+
             return{
-                content : [{type : "text", text : `${ai_response} `}]
+                content : [{type : "text", text : `${JSON.stringify(ai_response)} `}]
             }
 
         } catch (error) {
