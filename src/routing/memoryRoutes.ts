@@ -1,5 +1,5 @@
 import express from "express"
-import { deleteMemory, episodicMemory, isGoalOrHabbit, parseSms, queryEpisodic, queryMemory, relationshipQuery, saveGoalOrHabbit, saveMemory, saveRelationship } from "../controller/memoryController.js";
+import { deleteMemory, episodicMemory, isGoalOrHabbit, parseManualExpense, parseSms, queryEpisodic, queryMemory, relationshipQuery, saveGoalOrHabbit, saveMemory, saveRelationship } from "../controller/memoryController.js";
 
 const route = express.Router();
 
@@ -12,6 +12,7 @@ route.post("/save-relationship", saveRelationship)
 route.post("/relationship-query", relationshipQuery)
 route.post("/save-goalorhabbit", saveGoalOrHabbit)
 route.post("/parse-sms", parseSms);
+route.post("/parse-manualExpense", parseManualExpense);
 
 route.post("/goalOrHabbit", isGoalOrHabbit);
 
