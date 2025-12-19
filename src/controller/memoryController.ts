@@ -67,3 +67,7 @@ export async function saveGoalOrHabbit(req: any, res: any){
 export async function parseSms(req : any, res : any){
     handleMemoryTool(req, res);
 }
+
+export async function parseManualExpense(req: any, res : any){
+    handleMemoryTool(req, res);
+}
