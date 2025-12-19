@@ -484,8 +484,9 @@ server.registerTool(
             })
             expense.save();
             console.log(response);
+            const {type, amount} = response;
             return {
-                content : [{type : "text", text : `${JSON.stringify(response)}`}]
+                content : [{type : "text", text : `Your bank was ${type} by ${amount}`}]
             }
         } catch (error) {
             return {
@@ -516,8 +517,9 @@ server.registerTool(
             })
             expense.save();
             console.log(response);
+            const {type, amount} = response;
             return {
-                content : [{type : "text", text : `${response}`}]
+                content : [{type : "text", text : `Your bank was ${type} by ${amount}`}]
             }
         } catch (error) {
             return {
