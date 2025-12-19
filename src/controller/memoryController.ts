@@ -63,3 +63,7 @@ export async function saveGoalOrHabbit(req: any, res: any){
         })
     }
 }
+
+export async function parseSms(req : any, res : any){
+    handleMemoryTool(req, res);
+}

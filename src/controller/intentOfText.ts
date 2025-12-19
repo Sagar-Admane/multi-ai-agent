@@ -17,7 +17,83 @@ const openai = new OpenAI({
 export async function intentOfText(req : any, res : any){
     try {
         const text = req.body.text;
-        const prompt = `You are an intent classifier.
+        const prompt = `You are an intent classifier AND tool router.
+
+Your job is to:
+1. First decide if the user intent matches one of the AVAILABLE TOOLS.
+2. If a tool matches, return the TOOL NAME.
+3. If no tool matches, fall back to MEMORY / TASK intents exactly as defined below.
+
+--------------------------------------------------
+AVAILABLE TOOLS (HIGH PRIORITY)
+--------------------------------------------------
+
+If the user intent matches ANY of the following, return ONLY the tool name.
+
+TOOLS & WHEN TO USE THEM:
+
+1. parse-sms  
+Use when:
+- User provides a bank SMS
+- Mentions debit / credit SMS
+- Says things like:
+  "I got an SMS from bank"
+  "Parse this transaction message"
+  "This message says debited/credited"
+
+2. parse-manualExpense  
+Use when:
+- User manually describes an expense
+- No SMS format
+- Examples:
+  "I spent 200 on food today"
+  "Add expense 500 for groceries"
+  "Manually add an expense"
+
+3. get-transactions  
+Use when:
+- User asks to see transactions
+- Mentions date ranges
+- Examples:
+  "Show my transactions"
+  "Expenses from yesterday"
+  "Transactions from last month"
+  "What did I spend this week?"
+
+4. get-TransactionOnType  
+Use when:
+- User asks for only credit or debit transactions
+- Examples:
+  "Show credited transactions"
+  "Debits from last week"
+  "Money received today"
+
+5. getLatestBalance  
+Use when:
+- User asks for balance
+- Examples:
+  "What is my balance?"
+  "How much money do I have?"
+  "Remaining balance"
+  "Current bank balance"
+
+6. upsertBudget  
+Use when:
+- User sets or updates budget
+- Examples:
+  "Set my budget to 5000"
+  "Update budget to 10k"
+  "My monthly budget is 8000"
+
+IMPORTANT:
+- If a tool matches → RETURN ONLY THE TOOL NAME
+- Do NOT return memory intents if a tool matches
+- Do NOT add explanations
+- Do NOT return JSON
+
+--------------------------------------------------
+FALLBACK: MEMORY & TASK CLASSIFICATION
+--------------------------------------------------
 
 Return EXACTLY one of the following intents and nothing else:
 save-memory
@@ -54,6 +130,8 @@ classify as: save-relationship.
 5. Questions about ANOTHER person → relationship-query.
 
 6. New goal or habit → save-goalorhabbit.
+If intent is save-goalorhabbit:
+- classify as habit or goal
 
 7. Progress update → update-goalProgress.
 
@@ -69,24 +147,27 @@ classify as: save-relationship.
 - writing or sending an email,
 - adding to calendar,
 - booking something,
-- or any explicit task/action command
 
 classify as: task-intent.
-
-12.If intent : save-goalorhabbit
-- classify text as habit or goal
-        type : habit
-        type : goal
 
 Fallback rules:
 - Time-marker + question about the user’s past → query-episodic.
 - “I/my/me” + question + no time marker → query-memory.
 - Otherwise choose the closest valid intent.
 
-Output ONLY the intent name and if applicable type. No punctuation. No explanations.
+--------------------------------------------------
+FINAL OUTPUT RULE
+--------------------------------------------------
+Output ONLY ONE of:
+- Tool name (preferred)
+- OR intent name (+ type if applicable)
+
+No punctuation.
+No explanations.
 
 Now classify this:
-"${text}"`
+"${text}"
+`
 
 
         const response = await openai.chat.completions.create({
