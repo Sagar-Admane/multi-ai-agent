@@ -10,7 +10,7 @@ import Relationship from "../src/models/relationshipMemory.js";
 import { cosineSimilarity } from 'ai';
 import { tryLinkHabitToGoal } from './utils/helperFunction.js';
 import Expense from "../src/models/expenseModel.js"
-import cleanJSON from './utils/utils.js';
+import cleanJSON, { convertToText } from './utils/utils.js';
 
 console.log('GEMINI_API_KEY present:', !!process.env.GEMINI_API_KEY);
 
@@ -544,7 +544,10 @@ server.registerTool(
             const todaysDate = Date.now();
             const {ffrom, fto}  = await getTheDate(text);
             const from = new Date(ffrom);
-            const to = new Date(fto);
+            const to = new Date(fto).setHours(24,59,59,999);
+
+            console.log(from);
+            console.log(to);
 
             const expenses = await Expense.find({
                 createdAt : {
@@ -553,10 +556,11 @@ server.registerTool(
                 }
             }).sort({createdAt : -1});
 
-
-
+            var convertText = convertToText(expenses);
+            var convertText1 = convertText.join(",").split(",");
+            console.log(convertText1)
             return {
-                content : [{type : "text", text : `${JSON.stringify(expenses, null, 2)}`}]
+                content : [{type : "text", text : `${convertText}` }]
             }
 
         } catch (error) {
