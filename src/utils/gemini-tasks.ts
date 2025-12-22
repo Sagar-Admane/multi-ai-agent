@@ -507,7 +507,7 @@ Important:
         } else {
             return {
                 ffrom : new Date(),
-                fto : new Date()
+                fto : new Date().setHours(24, 59, 59, 999)
             }
         }
         return {
