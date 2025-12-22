@@ -71,3 +71,7 @@ export async function parseSms(req : any, res : any){
 export async function parseManualExpense(req: any, res : any){
     handleMemoryTool(req, res);
 }
+
+export async function getTransaction(req : any, res : any){
+    handleMemoryTool(req, res);
+}
