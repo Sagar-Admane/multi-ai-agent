@@ -636,7 +636,7 @@ server.registerTool(
             const result = balance[0]?.balance || 0;
 
             return {
-                content : [{type : "text", text : `${result}`}]
+                content : [{type : "text", text : `Your current account balance is : ${result}`}]
             }
 
 
