@@ -557,10 +557,10 @@ server.registerTool(
             }).sort({createdAt : -1});
 
             var convertText = convertToText(expenses);
-            var convertText1 = convertText.join(",").split(",");
-            console.log(convertText1)
+            var convertText1 = convertText.join("\n")
+            // console.log(convertText1)
             return {
-                content : [{type : "text", text : `${convertText}` }]
+                content : [{type : "text", text : `${convertText1}` }]
             }
 
         } catch (error) {
