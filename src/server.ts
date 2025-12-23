@@ -592,8 +592,7 @@ server.registerTool(
                     $lte : to
                 },
                 type : getType
-            })
-
+            }, {_id : 0, createdAt : 0, updatedAt : 0, __v : 0})
             return {
                 content : [{type : "text", text : `${JSON.stringify(expenses)}`}]
             }
