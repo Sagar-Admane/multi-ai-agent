@@ -521,3 +521,53 @@ Important:
         }
     }
 }
+
+export async function getMonthAndYear(text : string){
+    try {
+        const date = new Date();
+
+        const prompt = `### System:
+You are a precise data extraction assistant. Your task is to identify the specific month and year referenced in a user's request based on a provided "Current Date."
+
+### Context:
+Current Date: ${date}
+
+### Instructions:
+1. Analyze the User Input to determine if they are referring to the current month, a past month, or a future month.
+2. If the user uses relative terms like "this month," "last month," or "next month," calculate the result based on the Current Date.
+3. Output the result strictly in JSON format with the keys "month" (full name) and "year" (YYYY).
+4. If no specific month/year can be determined, return null for both values.
+
+### User Input:
+"${text}"
+
+RULES -
+Only provide with the month and year no extra information
+Just the month and year
+
+### Response:`
+
+        const result = await openai.chat.completions.create({
+            model : "meta-llama/llama-3.1-8b-instruct",
+            messages : [
+                {
+                    role : "user",
+                    content : `${prompt}`
+                }
+            ]
+        })
+
+        console.log(JSON.parse(cleanJSON(result.choices[0].message.content)));
+        const res = JSON.parse(cleanJSON(result.choices[0].message.content));
+        return {
+            "month" : res.month,
+            "year" : parseInt(res.year) 
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            "month" : "unknown",
+            "year" : 0
+        }
+    }
+}
