@@ -83,3 +83,7 @@ export async function getTranactiononType(req : any, res : any){
 export async function getLatestBalance(req : any, res : any){
     handleMemoryTool(req, res);
 }
+
+export async function getupsertBudget(req : any, res : any){
+    handleMemoryTool(req, res);
+}
