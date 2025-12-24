@@ -2,10 +2,11 @@ import 'dotenv/config';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {z} from "zod";
-import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateGoalProgress, generateImportanceScore, generateTasks, genereateRelationship, getBankStatementParser, getTheDate} from "../src/utils/gemini-tasks.js"
+import {detectHabitOrGoal, extractGoalDeadline, extractHabitFrequency, generateAIRespone, generateEmbeddings, generateGoalProgress, generateImportanceScore, generateTasks, genereateRelationship, getBankStatementParser, getMonthAndYear, getTheDate} from "../src/utils/gemini-tasks.js"
 import { connectDB } from "./utils/db.js";
 import EpisodicMemory from "../src/models/episodicMemory.js";
 import Memory from "../src/models/memory.js";
+import Budget from "../src/models/budget.js";
 import Relationship from "../src/models/relationshipMemory.js";
 import { cosineSimilarity } from 'ai';
 import { tryLinkHabitToGoal } from './utils/helperFunction.js';
@@ -659,7 +660,7 @@ server.registerTool(
     },
     async({text}) => {
         try {
-            const category = text.split(" ").includes("update") ? "Update" : "Set";
+            const category = text.split(" ").includes("update") || text.split(" ").includes("Update") ? "Update" : "Set";
             const Nan = text.split(" ").filter(m => !isNaN(parseInt(m)));
             if(Nan.length === 0 || Nan.length>1){
                 return {
@@ -667,6 +668,36 @@ server.registerTool(
                 }
             }
             const budget = parseInt(Nan[0]);
+            const { month, year } = await getMonthAndYear(text);
+            if (month === "unknown" || year === 0) {
+              return {
+                content: [
+                  { type: "text", text: `Unable to parse month and year` },
+                ],
+              };
+            }
+
+            if (category === "Set") {
+              const budgetDB = new Budget({
+                budget: budget,
+                month: month,
+                year: year,
+              });
+              budgetDB.save();
+            } else {
+              var budgetDb = await Budget.findOne({ month: month, year: year });
+              if (!budgetDb) {
+                return {
+                  content: [
+                    { type: "text", text: `No such month or year exists` },
+                  ],
+                };
+              }
+
+              budgetDb.budget = budget;
+              budgetDb.save();
+            }
+
             return {
                 content : [{type : "text", text : `${category} the budget to ${budget}`}]
             }
