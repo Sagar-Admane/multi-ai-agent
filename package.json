@@ -8,7 +8,7 @@
     "memory_server:build": "tsc",
     "memory_server:build:watch": "tsc --watch",
     "memory_server:dev": "tsx src/server.ts",
-    "memory_server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector@0.15.0 npm run server:dev",
+    "memory_server:inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector@0.15.0 npm run memory_server:dev",
     "memory_server:test": "tsx ./src/github.ts",
     "client:mcp": "cd build && node client.js",
     "client:dev": "tsx src/client.ts",
