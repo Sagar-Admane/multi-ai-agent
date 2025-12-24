@@ -9,58 +9,45 @@ const openai = new OpenAI({
     apiKey : process.env.openrouter,
 })
 
-export async function getTheDate(text){
-
-    const prompt = `You are a strict date-range parser.
-
-Your job:
-Convert natural language time expressions into an exact date range.
-
-Rules:
-- Output ONLY valid minified JSON
-- No text, no explanation, no markdown
-- No newlines, no backticks
-- Use ISO format: YYYY-MM-DD
-
-Output schema:
-{"from":"YYYY-MM-DD","to":"YYYY-MM-DD"}
-
-Date interpretation rules:
-- "today" = current date
-- "yesterday" = current date - 1 day
-- "tomorrow" = current date + 1 day
-- "last week" = previous 7 days ending yesterday
-- "this week" = start of current week to today
-- "last month" = first day of previous month to last day of previous month
-- "this month" = first day of current month to today
-- "from X to Y" = parse both sides
-- "since X" = from X to today
-- "till today" = from earliest inferred date to today
-- explicit dates like "2024-01-15" or "15 Jan 2024" must be parsed
-- If only one date is mentioned, assume it is BOTH from and to
-- If ambiguous or impossible, return {"from":"none","to":"none"}
-
-Important:
-- Always respect the provided current date
-- Never guess future dates unless explicitly stated
-- Never include time (only date)
-`
-
+export async function getMonthAndYear(text){
     try {
-        const response = await openai.chat.completions.create({
+        const date = new Date();
+
+        const prompt = `### System:
+You are a precise data extraction assistant. Your task is to identify the specific month and year referenced in a user's request based on a provided "Current Date."
+
+### Context:
+Current Date: ${date}
+
+### Instructions:
+1. Analyze the User Input to determine if they are referring to the current month, a past month, or a future month.
+2. If the user uses relative terms like "this month," "last month," or "next month," calculate the result based on the Current Date.
+3. Output the result strictly in JSON format with the keys "month" (full name) and "year" (YYYY).
+4. If no specific month/year can be determined, return null for both values.
+
+### User Input:
+"${text}"
+
+RULES -
+Only provide with the month and year no extra information, Use max to max 5 tokens
+
+### Response:`
+
+        const result = await openai.chat.completions.create({
             model : "meta-llama/llama-3.1-8b-instruct",
             messages : [
                 {
-                    role : "developer",
-                    content : `${prompt}
-                    text : ${text},
-                    date : ${new Date().toISOString().slice(0,10)}`
+                    role : "user",
+                    content : `${prompt}`
                 }
             ]
         })
 
-        console.log(response.choices[0].message.content)
+        console.log(JSON.parse(cleanJSON(result.choices[0].message.content)));
+        const res = JSON.parse(cleanJSON(result.choices[0].message.content));
+        return res;
     } catch (error) {
+        console.log(error);
         return error
     }
 }
@@ -78,4 +65,4 @@ function cleanJSON(str) {
 
 // generateRelation("Set a reminder for tomorrow's meeting with AMC motors on 12:00 pm")
 
-getTheDate("from yesterday to today");
+getMonthAndYear("Update this month's budget to 860 rs");
